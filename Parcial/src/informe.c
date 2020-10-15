@@ -103,12 +103,9 @@ static int calculateNumberOfPostsInCertainState(Aviso* listAviso, int lenAvisos,
 	{
 		for(int i=0; i<lenAvisos; i++)
 		{
-			if(listAviso[i].isEmpty == FALSE   && listAviso[i].idCliente == id)
+			if(listAviso[i].isEmpty == FALSE   && listAviso[i].idCliente == id && listAviso[i].estado == estado)
 			{
-				if(listAviso[i].estado == estado)
-				{
-					avisosPorCliente++;
-				}
+				avisosPorCliente++;
 			}
 		}
 	}

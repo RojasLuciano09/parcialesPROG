@@ -7,6 +7,7 @@
 #define TRUE 1
 #define FALSE 0
 #define ATTEMPTS 3
+#define PRINT_BOTH_POST_STATUS 3
 #define ERROR "\nError!, ingrese un dato valido: \n"
 #define LONG_AVISO 64
 #define MAX_RUBRO 10
@@ -45,6 +46,6 @@ int Aviso_initList(Aviso *listAviso, int lenAviso);
 int Aviso_searchFreeIndex(Aviso *listAviso, int lenAviso, int *pFreeIndex);
 int Aviso_imprimirClienteJuntoACantidadDeAvisos(Aviso* listAviso, int lenAvisos,Cliente *listCliente,int lenCliente);
 
-int Aviso_printDataFromBothEntities(Aviso *listAviso, Cliente *listCliente, int lenAviso, int lenCliente);
+int Aviso_printDataFromBothEntities(Aviso *listAviso, Cliente *listCliente, int lenAviso, int lenCliente,int estado);
 
 #endif /* AVISO_H_ */

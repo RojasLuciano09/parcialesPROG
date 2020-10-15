@@ -93,8 +93,8 @@ int main(void) {
 						}
 	break;
 
-	case 9: //Informa los datos cargados de   Clientes y Aviso indexados por su ID.
-		Aviso_printDataFromBothEntities(listAviso, ClienteList, lenAviso, lenCliente);
+	case 9: //Informa los datos cargados de   Clientes y Aviso indexados por su ID.  3 -> imprime ambos estados de las publicaciones.
+		Aviso_printDataFromBothEntities(listAviso, ClienteList, lenAviso, lenCliente,3);
 	break;
 
 	case 10://Realizan una carga automatica de datos linkeados por ID

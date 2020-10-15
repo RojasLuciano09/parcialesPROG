@@ -290,9 +290,10 @@ int Cliente_modificar(Cliente *listCliente, int lenCliente)
 	Cliente bufferCliente;
 	if(listCliente != NULL && lenCliente>0 && Cliente_isEmpty(listCliente, lenCliente)==0)
 	{
+
 		Cliente_print(listCliente, lenCliente);
 		if(
-				utn_getInt("Ingrese el ID a modificar: ",ERROR,&idToModify,ATTEMPTS,INT_MIN,INT_MAX)==0 	&&
+				utn_getInt("Ingrese el ID del cliente a modificar: ",ERROR,&idToModify,ATTEMPTS,INT_MIN,INT_MAX)==0 	&&
 				Cliente_findID_returnINDEX(listCliente,lenCliente,idToModify,&indexToModify)==0				&&
 				utn_getString("\nNombre: ",ERROR, bufferCliente.nombre, ATTEMPTS, LONG_NAME)==0      	 	&&
 				utn_getString("\nApellido: ",ERROR, bufferCliente.apellido, ATTEMPTS, LONG_NAME)==0   		&&
