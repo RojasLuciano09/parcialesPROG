@@ -65,11 +65,11 @@ int Informe_imprimirClienteAvisosACTIVOS(Aviso* listAviso, int lenAvisos,Cliente
 	Cliente bufferMaxCliente;
 	if(listAviso !=NULL && listCliente !=NULL && lenAvisos>0 && lenCliente>0  && Aviso_isEmpty(listAviso, lenAvisos)==0)
 	{
-		printf("\nNOMBRE          APELLIDO        CUIT                ID        CANTIDAD");
+		printf("\nNOMBRE          APELLIDO        CUIT               ID         CANTIDAD");
 		for(int i=0;i<lenCliente;i++)
 		{
 			calculateNumberOfPostsInCertainState(listAviso,lenAvisos,listCliente[i].id,&contador,estado);
-			if(i==0 || contador>maxContador)
+			if(i==0 || contador>maxContador )
 			{
 				maxContador = contador;
 				bufferMaxCliente = listCliente[i];
@@ -99,13 +99,28 @@ static int calculateNumberOfPostsInCertainState(Aviso* listAviso, int lenAvisos,
 	int functionReturn=-1;
 	int avisosPorCliente=0;
 
-	if(listAviso!=NULL && lenAvisos>0 && id>0)
+	for(int i=0; i<lenAvisos; i++)
 	{
-		for(int i=0; i<lenAvisos; i++)
+		if(listAviso[i].isEmpty == FALSE   && listAviso[i].idCliente == id)
 		{
-			if(listAviso[i].isEmpty == FALSE   && listAviso[i].idCliente == id && listAviso[i].estado == estado)
+			switch(estado)
 			{
-					avisosPorCliente++;
+				case 0:
+					if(listAviso[i].estado == 0)
+					{
+						avisosPorCliente++;
+					}
+				break;
+
+				case 1:
+					if(listAviso[i].estado == 1)
+					{
+						avisosPorCliente++;
+					}
+				break;
+
+				default:avisosPorCliente++;
+				break;
 			}
 		}
 	}

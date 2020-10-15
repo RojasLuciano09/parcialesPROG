@@ -330,14 +330,14 @@ strncpy(listCliente[2].cuit,"23-37933047-1",LONG_NAME);
 	    listCliente[2].id = Cliente_generateNewID();
 	    listCliente[2].isEmpty = FALSE;
 
-strncpy(listCliente[4].nombre,"Jackie",LONG_NAME);
-strncpy(listCliente[4].apellido,"Cieras",LONG_NAME);
+strncpy(listCliente[4].nombre,"usuario2",LONG_NAME);
+strncpy(listCliente[4].apellido,"usuario2",LONG_NAME);
 strncpy(listCliente[4].cuit,"23-37933047-2",LONG_NAME);
 	    listCliente[4].id = Cliente_generateNewID();
 	    listCliente[4].isEmpty = FALSE;
 
-strncpy(listCliente[6].nombre,"elba",LONG_NAME);
-strncpy(listCliente[6].apellido,"lazo",LONG_NAME);
+strncpy(listCliente[6].nombre,"usuario3",LONG_NAME);
+strncpy(listCliente[6].apellido,"usuario3",LONG_NAME);
 strncpy(listCliente[6].cuit,"23-37933047-3",LONG_NAME);
 	    listCliente[6].id = Cliente_generateNewID();
 	    listCliente[6].isEmpty = FALSE;

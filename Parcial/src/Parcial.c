@@ -83,7 +83,7 @@ int main(void) {
 						{
 						case 1:
 							printf("\nCliente con mas avisos: ");
-							Informe_imprimirClienteAvisosACTIVOS(listAviso, lenAviso, ClienteList, lenCliente,1);
+							Informe_imprimirClienteAvisosACTIVOS(listAviso, lenAviso, ClienteList, lenCliente,3);
 							break;
 
 						case 2:

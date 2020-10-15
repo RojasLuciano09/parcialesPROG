@@ -657,28 +657,28 @@ void Aviso_cargaAutomatica(Aviso *listAviso)
 	strncpy(listAviso[5].textoAviso,"Venta de trineos",LONG_AVISO);
 			listAviso[5].id =Aviso_generateNewID();
 			listAviso[5].estado = 1; //ACTIVA 1
-			listAviso[5].idCliente =3;
+			listAviso[5].idCliente =7;
 			listAviso[5].isEmpty = FALSE;
 			listAviso[5].rubro = 1;
 
 	strncpy(listAviso[7].textoAviso,"Venta de skate",LONG_AVISO);
 			listAviso[7].id =Aviso_generateNewID();
-			listAviso[7].estado = 1; //ACTIVA 1
-			listAviso[7].idCliente =4;
+			listAviso[7].estado = 0; //ACTIVA 1
+			listAviso[7].idCliente =7;
 			listAviso[7].isEmpty = FALSE;
 			listAviso[7].rubro = 2;
 
 	strncpy(listAviso[9].textoAviso,"Venta de bicicleta",LONG_AVISO);
 			listAviso[9].id =Aviso_generateNewID();
-			listAviso[9].estado = 1; //ACTIVA 1
-			listAviso[9].idCliente =5;
+			listAviso[9].estado = 0; //ACTIVA 1
+			listAviso[9].idCliente =7;
 			listAviso[9].isEmpty = FALSE;
 			listAviso[9].rubro = 3;
 
 	strncpy(listAviso[11].textoAviso,"Venta de camion",LONG_AVISO);
 			listAviso[11].id =Aviso_generateNewID();
-			listAviso[11].estado = 0; //PAUSA 0
-			listAviso[11].idCliente =6;
+			listAviso[11].estado = 1; //PAUSA 0
+			listAviso[11].idCliente =7;
 			listAviso[11].isEmpty = FALSE;
 			listAviso[11].rubro =4;
 
@@ -730,5 +730,12 @@ void Aviso_cargaAutomatica(Aviso *listAviso)
 			listAviso[25].idCliente =2;
 			listAviso[25].isEmpty = FALSE;
 			listAviso[25].rubro = 4;
+
+	strncpy(listAviso[28].textoAviso,"Venta de motos",LONG_AVISO);
+			listAviso[28].id =Aviso_generateNewID();
+					listAviso[28].estado = 1;
+					listAviso[28].idCliente =2;
+					listAviso[28].isEmpty = FALSE;
+					listAviso[28].rubro = 1;
 
 }
