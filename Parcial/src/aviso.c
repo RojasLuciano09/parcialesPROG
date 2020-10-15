@@ -290,10 +290,10 @@ int Aviso_alta(Aviso *listAviso, int len,Cliente *listCliente, int lenCliente)
 
 	if(listAviso!=NULL && len>0 && Aviso_searchFreeIndex(listAviso, len, &index)==0 && Cliente_isEmpty(listCliente, lenCliente)==0)
 	{
-		if(	utn_getInt("\nIngrese el ID del cliente: ",ERROR, &bufferAviso.idCliente, ATTEMPTS, INT_MIN, INT_MAX)==0 &&
-			Cliente_findID(listCliente,lenCliente,bufferAviso.idCliente)==0									 	 &&
-			utn_getInt("\nIngrese rubro: ",ERROR,&bufferAviso.rubro, ATTEMPTS,0,MAX_RUBRO)==0 						 &&
-			utn_getLetrasYEspacios(bufferAviso.textoAviso, LONG_AVISO, "\nTexto del aviso: ",ERROR, ATTEMPTS)==0	 )
+		if(	utn_getInt("\nIngrese el ID del cliente: ",ERROR, &bufferAviso.idCliente, ATTEMPTS, INT_MIN, INT_MAX)==0    &&
+			Cliente_findID(listCliente,lenCliente,bufferAviso.idCliente)==0									 	 		&&
+			utn_getInt("\nIngrese rubro: ",ERROR,&bufferAviso.rubro, ATTEMPTS,0,MAX_RUBRO)==0 						    &&
+			utn_getLetrasYEspacios(bufferAviso.textoAviso, LONG_AVISO, "\nTexto del aviso: ",ERROR, ATTEMPTS)==0	    )
 		{
 			listAviso[index] = bufferAviso;
 			listAviso[index].estado = 1;

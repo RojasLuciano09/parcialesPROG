@@ -226,10 +226,10 @@ int Cliente_alta(Cliente *listCliente,int lenCliente)
 	printf("\nALTA CLIENTE\n");
 	if(listCliente!=NULL && lenCliente>0 && Cliente_searchFreeIndex(listCliente,lenCliente,&freeIndex)==0)
 	{
-		if( utn_getString("\nNombre: ",ERROR,bufferCliente.nombre,ATTEMPTS,LONG_NAME)==0 	 &&
-			utn_getString("\nApellido: ",ERROR,bufferCliente.apellido,ATTEMPTS,LONG_NAME)==0 &&
-			utn_getCuit("Ingrese Cuit: ", ERROR, bufferCliente.cuit, ATTEMPTS,CUIT_SIZE)==0	 &&
-			Cliente_findByCuit(listCliente, lenCliente, bufferCliente.cuit)!=0				)
+		if( utn_getString("\nNombre: ",ERROR,bufferCliente.nombre,ATTEMPTS,LONG_NAME)==0 	 	&&
+			utn_getString("\nApellido: ",ERROR,bufferCliente.apellido,ATTEMPTS,LONG_NAME)==0 	&&
+			utn_getCuit("Ingrese Cuit: ", ERROR, bufferCliente.cuit, ATTEMPTS,CUIT_SIZE)==0	 	&&
+			Cliente_findByCuit(listCliente, lenCliente, bufferCliente.cuit)!=0					)
 		 {
 			UpperFirstChar(bufferCliente.nombre);
 			UpperFirstChar(bufferCliente.apellido);
