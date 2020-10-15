@@ -33,7 +33,7 @@ int Cliente_initList(Cliente *listCliente, int lenCliente);
 int Cliente_searchFreeIndex(Cliente *listCliente, int lenCliente, int *pFreeIndex);
 int Cliente_print(Cliente *listCliente, int lenCliente);
 int Cliente_findByCuit(Cliente *listCliente, int lenCliente,char *cuit);
-void ClienteCargaAutomatica(Cliente *listCliente);
+void ClienteCargaAutomatica(Cliente *listCliente,int lenCliente);
 
 
 #endif /* CLIENTE_H_ */

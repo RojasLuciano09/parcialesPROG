@@ -73,14 +73,17 @@ int main(void) {
 	break;
 
 	case 8:
-		utn_getMenu("\n1) Cliente con más avisos."
+		utn_getMenu("\n1) Cliente con más avisos:"
 					"\n2) Cantidad de avisos pausados."
 					"\n3) Rubro con mas avisos. "
-					,&subOpcion, ATTEMPTS, 1, 3);
+					"\n4) Cliente con más avisos pausados. "
+					"\n5) Cliente con más avisos activos:"
+					,&subOpcion, ATTEMPTS, 1, 5);
 						switch(subOpcion)
 						{
 						case 1:
-							Informe_imprimirClienteAvisosACTIVOS(listAviso, lenAviso, ClienteList, lenCliente);
+							printf("\nCliente con mas avisos: ");
+							Informe_imprimirClienteAvisosACTIVOS(listAviso, lenAviso, ClienteList, lenCliente,1);
 							break;
 
 						case 2:
@@ -90,6 +93,17 @@ int main(void) {
 						case 3:
 							informe_rubroConMasAviso(listAviso, lenAviso);
 						break;
+
+						case 4:
+							printf("\nCliente con mas avisos pausados.");
+							Informe_imprimirClienteAvisosACTIVOS(listAviso, lenAviso, ClienteList, lenCliente,0);
+						break;
+
+						case 5:
+							printf("\nCliente con mas avisos activos.");
+							Informe_imprimirClienteAvisosACTIVOS(listAviso, lenAviso, ClienteList, lenCliente,1);
+						break;
+
 						}
 	break;
 
@@ -98,7 +112,7 @@ int main(void) {
 	break;
 
 	case 10://Realizan una carga automatica de datos linkeados por ID
-		ClienteCargaAutomatica(ClienteList);
+		ClienteCargaAutomatica(ClienteList,lenCliente);
 		Aviso_cargaAutomatica(listAviso);
 		break;
 

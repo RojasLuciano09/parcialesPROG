@@ -322,65 +322,71 @@ int Cliente_modificar(Cliente *listCliente, int lenCliente)
 /**
  * \brief Make an automatic client load.  // JUST FOR TEST //
  */
-void ClienteCargaAutomatica(Cliente *listCliente)
+void ClienteCargaAutomatica(Cliente *listCliente,int lenCliente)
 {
-strncpy(listCliente[2].nombre,"USUARIO1",LONG_NAME);
-strncpy(listCliente[2].apellido,"USUARIO1",LONG_NAME);
+strncpy(listCliente[2].nombre,"mauro",LONG_NAME);
+strncpy(listCliente[2].apellido,"viale",LONG_NAME);
 strncpy(listCliente[2].cuit,"23-37933047-1",LONG_NAME);
 	    listCliente[2].id = Cliente_generateNewID();
 	    listCliente[2].isEmpty = FALSE;
 
-strncpy(listCliente[4].nombre,"USUARIO2",LONG_NAME);
-strncpy(listCliente[4].apellido,"USUARIO2",LONG_NAME);
+strncpy(listCliente[4].nombre,"Jackie",LONG_NAME);
+strncpy(listCliente[4].apellido,"Cieras",LONG_NAME);
 strncpy(listCliente[4].cuit,"23-37933047-2",LONG_NAME);
 	    listCliente[4].id = Cliente_generateNewID();
 	    listCliente[4].isEmpty = FALSE;
 
-strncpy(listCliente[6].nombre,"USUARIO3",LONG_NAME);
-strncpy(listCliente[6].apellido,"USUARIO3",LONG_NAME);
+strncpy(listCliente[6].nombre,"elba",LONG_NAME);
+strncpy(listCliente[6].apellido,"lazo",LONG_NAME);
 strncpy(listCliente[6].cuit,"23-37933047-3",LONG_NAME);
 	    listCliente[6].id = Cliente_generateNewID();
 	    listCliente[6].isEmpty = FALSE;
 
-strncpy(listCliente[8].nombre,"USUARIO4",LONG_NAME);
-strncpy(listCliente[8].apellido,"USUARIO4",LONG_NAME);
+strncpy(listCliente[8].nombre,"alberto",LONG_NAME);
+strncpy(listCliente[8].apellido,"nisman",LONG_NAME);
 strncpy(listCliente[8].cuit,"23-37933047-4",LONG_NAME);
 	    listCliente[8].id = Cliente_generateNewID();
 	    listCliente[8].isEmpty = FALSE;
 
-strncpy(listCliente[10].nombre,"USUARIO5",LONG_NAME);
-strncpy(listCliente[10].apellido,"USUARIO5",LONG_NAME);
+strncpy(listCliente[10].nombre,"elba",LONG_NAME);
+strncpy(listCliente[10].apellido,"zurita",LONG_NAME);
 strncpy(listCliente[10].cuit,"23-37933047-5",LONG_NAME);
 	    listCliente[10].id = Cliente_generateNewID();
 	    listCliente[10].isEmpty = FALSE;
 
-strncpy(listCliente[12].nombre,"USUARIO6",LONG_NAME);
-strncpy(listCliente[12].apellido,"USUARIO6",LONG_NAME);
+strncpy(listCliente[12].nombre,"aquiles",LONG_NAME);
+strncpy(listCliente[12].apellido,"bailo",LONG_NAME);
 strncpy(listCliente[12].cuit,"23-37933047-6",LONG_NAME);
 	    listCliente[12].id = Cliente_generateNewID();
 	    listCliente[12].isEmpty = FALSE;
 
-strncpy(listCliente[14].nombre,"USUARIO7",LONG_NAME);
-strncpy(listCliente[14].apellido,"USUARIO7",LONG_NAME);
+strncpy(listCliente[14].nombre,"elsa",LONG_NAME);
+strncpy(listCliente[14].apellido,"capunta",LONG_NAME);
 strncpy(listCliente[14].cuit,"23-37933047-7",LONG_NAME);
 	    listCliente[14].id = Cliente_generateNewID();
 	    listCliente[14].isEmpty = FALSE;
 
-strncpy(listCliente[16].nombre,"USUARIO8",LONG_NAME);
-strncpy(listCliente[16].apellido,"USUARIO8",LONG_NAME);
+strncpy(listCliente[16].nombre,"zoila",LONG_NAME);
+strncpy(listCliente[16].apellido,"cerda",LONG_NAME);
 strncpy(listCliente[16].cuit,"23-37933047-8",LONG_NAME);
 	    listCliente[16].id = Cliente_generateNewID();
 	    listCliente[16].isEmpty = FALSE;
 
-strncpy(listCliente[18].nombre,"USUARIO9",LONG_NAME);
-strncpy(listCliente[18].apellido,"USUARIO9",LONG_NAME);
+strncpy(listCliente[18].nombre,"luz",LONG_NAME);
+strncpy(listCliente[18].apellido,"rojas",LONG_NAME);
 strncpy(listCliente[18].cuit,"23-37933047-9",LONG_NAME);
 	    listCliente[18].id = Cliente_generateNewID();
 	    listCliente[18].isEmpty = FALSE;
 
-strncpy(listCliente[20].nombre,"USUARIO10",LONG_NAME);
-strncpy(listCliente[20].apellido,"USUARIO10",LONG_NAME);
+strncpy(listCliente[20].nombre,"marcia",LONG_NAME);
+strncpy(listCliente[20].apellido,"ana",LONG_NAME);
 strncpy(listCliente[20].cuit,"23-37933041-1",LONG_NAME);
 	    listCliente[20].id = Cliente_generateNewID();
 	    listCliente[20].isEmpty = FALSE;
+
+	for(int i=0; i<lenCliente;i++)
+	{
+		UpperFirstChar(listCliente[i].nombre);
+		UpperFirstChar(listCliente[i].apellido);
+	}
 }

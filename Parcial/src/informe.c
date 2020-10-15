@@ -57,7 +57,7 @@ int Informe_cantidadDeAvisosPausados(Aviso *listAviso, int lenAvisos,Cliente *li
  * \param int estado: status of the publication of which you want to consult
  * \return (-1) if something went wrong, (0) if everything is OK.
  */
-int Informe_imprimirClienteAvisosACTIVOS(Aviso* listAviso, int lenAvisos,Cliente *listCliente,int lenCliente)
+int Informe_imprimirClienteAvisosACTIVOS(Aviso* listAviso, int lenAvisos,Cliente *listCliente,int lenCliente,int estado)
 {
 	int functionReturn = -1;
 	int contador;
@@ -65,10 +65,10 @@ int Informe_imprimirClienteAvisosACTIVOS(Aviso* listAviso, int lenAvisos,Cliente
 	Cliente bufferMaxCliente;
 	if(listAviso !=NULL && listCliente !=NULL && lenAvisos>0 && lenCliente>0  && Aviso_isEmpty(listAviso, lenAvisos)==0)
 	{
-		printf("\nNOMBRE          APELLIDO        CUIT                ID     CANTIDAD DE AVISOS ACTIVOS");
+		printf("\nNOMBRE          APELLIDO        CUIT                ID        CANTIDAD");
 		for(int i=0;i<lenCliente;i++)
 		{
-			calculateNumberOfPostsInCertainState(listAviso,lenAvisos,listCliente[i].id,&contador,ACTIVE_POST);
+			calculateNumberOfPostsInCertainState(listAviso,lenAvisos,listCliente[i].id,&contador,estado);
 			if(i==0 || contador>maxContador)
 			{
 				maxContador = contador;
@@ -105,7 +105,7 @@ static int calculateNumberOfPostsInCertainState(Aviso* listAviso, int lenAvisos,
 		{
 			if(listAviso[i].isEmpty == FALSE   && listAviso[i].idCliente == id && listAviso[i].estado == estado)
 			{
-				avisosPorCliente++;
+					avisosPorCliente++;
 			}
 		}
 	}
@@ -123,7 +123,7 @@ static int calculateNumberOfPostsInCertainState(Aviso* listAviso, int lenAvisos,
  * \param int estado: status of the publication of which you want to consult
  * \return (-1) if something went wrong, (0) if everything is OK.
 
-int Informe_cantidadDeAvisosMAX(Aviso *listAviso, int lenAvisos,Cliente *listCliente,int lenCliente,int estado)
+int Informe_cantidadDeAvisos(Aviso *listAviso, int lenAvisos,Cliente *listCliente,int lenCliente,int estado)
 {
 	int functionReturn = -1;
 	int contador;

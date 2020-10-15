@@ -691,21 +691,21 @@ void Aviso_cargaAutomatica(Aviso *listAviso)
 
 	strncpy(listAviso[15].textoAviso,"Venta de sillas",LONG_AVISO);
 			listAviso[15].id =Aviso_generateNewID();
-			listAviso[15].estado = 1; //ACTIVA 1
-			listAviso[15].idCliente =8;
+			listAviso[15].estado = 0; //ACTIVA 1
+			listAviso[15].idCliente =10;
 			listAviso[15].isEmpty = FALSE;
 			listAviso[15].rubro =4;
 
 	strncpy(listAviso[17].textoAviso,"Venta de monitor",LONG_AVISO);
 			listAviso[17].id =Aviso_generateNewID();
 			listAviso[17].estado = 0; //PAUSA 0
-			listAviso[17].idCliente =9;
+			listAviso[17].idCliente =10;
 			listAviso[17].isEmpty = FALSE;
 			listAviso[17].rubro =4;
 
 	strncpy(listAviso[19].textoAviso,"Venta de gabinete",LONG_AVISO);
 			listAviso[19].id =Aviso_generateNewID();
-			listAviso[19].estado = 1; //ACTIVA 1
+			listAviso[19].estado = 0; //ACTIVA 1
 			listAviso[19].idCliente =10;
 			listAviso[19].isEmpty = FALSE;
 			listAviso[19].rubro = 4;
@@ -719,7 +719,7 @@ void Aviso_cargaAutomatica(Aviso *listAviso)
 
 	strncpy(listAviso[23].textoAviso,"Venta de mouse",LONG_AVISO);
 			listAviso[23].id =Aviso_generateNewID();
-			listAviso[23].estado = 0; //PAUSA 0
+			listAviso[23].estado = 1; //PAUSA 0
 			listAviso[23].idCliente =2;
 			listAviso[23].isEmpty = FALSE;
 			listAviso[23].rubro =4;
