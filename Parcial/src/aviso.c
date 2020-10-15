@@ -10,12 +10,12 @@
 #include "aviso.h"
 #include "cliente.h"
 
-
 static int Aviso_generateNewID(void);
-static int Aviso_bajarTodasLasPublicacionDeunID(Aviso *listAviso, int lenAviso, int id);
-static int Aviso_calcularNumeroAvisosUnCliente(Aviso* listAviso, int lenAvisos,int id, int *pCountAviso);
-static int thisIdHasPausedPosts(Aviso *listAviso,int lenAviso,int idCliente);
-static int thisIdHasActivePosts(Aviso *listAviso,int lenAviso,int idCliente);
+static int unsubscribeAClientPostsById(Aviso *listAviso, int lenAviso, int id);
+static int calculateAdsPerClient(Aviso* listAviso, int lenAvisos,int id, int *pCountAviso);
+static int checkPostStatus(Aviso *listAviso,int lenAviso,int idCliente,int estado);
+static int joinDataFromBothEntities(Aviso *listAviso, Cliente *listCliente, int lenAviso, int lenCliente,int posicion);
+static int unsubscribeAPostByItsId(Aviso *listAviso,int lenAviso,int idAviso,int estado);
 
 /**
  * \brief Function that scrolls through the list of notices in search of FALSE status
@@ -104,8 +104,7 @@ int Aviso_print(Aviso *listAviso, int len) {
 		if (listAviso != NULL && len > 0 && Aviso_isEmpty(listAviso, len)==0)
 		{
 			printf("\nREPORTE  PUBLICACIONES\n");
-			printf("\nCONTENIDO    ID_Aviso      RUBRO        ESTADO        \n"); //Completar con lo que pidan en el reporte.
-
+			printf("\nPUBLICACIONES    ID_AVISO      RUBRO        ESTADO       ID_CLIENTE \n");
 			for (int i = 0; i<len; i++)
 			{
 				if (listAviso[i].isEmpty == FALSE)
@@ -118,7 +117,7 @@ int Aviso_print(Aviso *listAviso, int len) {
 					{
 						strncpy(strTipo,"PAUSADA",8);
 					}
-					printf("%-15s %-6d %8d  %13s \n",listAviso[i].textoAviso,listAviso[i].id,listAviso[i].rubro,strTipo);
+					printf("%-15s %-6d %8d  %13s %8d\n",listAviso[i].textoAviso,listAviso[i].id,listAviso[i].rubro,strTipo,listAviso[i].idCliente);
 				}
 			}
 			functionReturn = 0;
@@ -136,14 +135,14 @@ int Aviso_print(Aviso *listAviso, int len) {
  * \param int idCliente: ID from which the publications will be searched
  * \return (-1) if something went wrong, (0) if everything is OK.
  */
-int AvisoCliente_print(Aviso *listAviso, int len,int idCliente) {
+int Aviso_printDataByIDClient(Aviso *listAviso, int len,int idCliente) {
 	int functionReturn = -1;
 	char strTipo[8];
 
 		if (listAviso != NULL && len > 0 && Aviso_isEmpty(listAviso, len)==0 )
 		{
 			printf("\nPUBLICACIONES DEL CLIENTE N°: %d \n",idCliente);
-			printf("\nCONTENIDO    ID_Aviso      RUBRO      ESTADO \n");
+			printf("\nCONTENIDO       ID_Aviso       RUBRO       ESTADO \n");
 			for (int i = 0; i < len; i++)
 			{
 				if(listAviso[i].isEmpty == FALSE && listAviso[i].idCliente == idCliente)
@@ -156,8 +155,7 @@ int AvisoCliente_print(Aviso *listAviso, int len,int idCliente) {
 					{
 						strncpy(strTipo,"PAUSADA",8);
 					}
-					printf("%-15s %-6d %8d  %13s \n",listAviso[i].textoAviso,listAviso[i].id,listAviso[i].rubro,strTipo);
-
+					printf("%-18s %-6d %8d  %13s \n",listAviso[i].textoAviso,listAviso[i].id,listAviso[i].rubro,strTipo);
 					functionReturn = 0;
 				}
 			}
@@ -174,7 +172,7 @@ int AvisoCliente_print(Aviso *listAviso, int len,int idCliente) {
  */
 int Aviso_imprimirClienteJuntoACantidadDeAvisos(Aviso* listAviso, int lenAvisos,Cliente *listCliente,int lenCliente)
 {
-	int retorno = -1;
+	int functionReturn = -1;
 	int contadorPublicaciones=0;
 
 	if(listAviso !=NULL && listCliente !=NULL && lenAvisos>0 && lenCliente>0 && Aviso_isEmpty(listAviso, lenAvisos)==0)
@@ -185,17 +183,17 @@ int Aviso_imprimirClienteJuntoACantidadDeAvisos(Aviso* listAviso, int lenAvisos,
 		{
 			if(listCliente[i].isEmpty==FALSE)
 			{
-				Aviso_calcularNumeroAvisosUnCliente(listAviso,lenAvisos,listCliente[i].id,&contadorPublicaciones);
+				calculateAdsPerClient(listAviso,lenAvisos,listCliente[i].id,&contadorPublicaciones);
 				printf("%-15s %-15s %4s %15d \n",listCliente[i].nombre,listCliente[i].apellido,listCliente[i].cuit,contadorPublicaciones);
 			}
 		}
-		retorno=0;
+		functionReturn=0;
 	}
 	else
 	{
 		printf("\nNo hay datos cargados.\n");
 	}
-	return retorno;
+	return functionReturn;
 }
 
 /** \brief Calculate the number of posts of an ID
@@ -205,9 +203,9 @@ int Aviso_imprimirClienteJuntoACantidadDeAvisos(Aviso* listAviso, int lenAvisos,
  * \param int pCountAviso: Pointer that will have the number of publications of a client
  * \return (-1) if something went wrong, (0) if everything is OK.
  */
-static int Aviso_calcularNumeroAvisosUnCliente(Aviso* listAviso, int lenAvisos,int id, int *pCountAviso)
+static int calculateAdsPerClient(Aviso* listAviso, int lenAvisos,int id, int *pCountAviso)
 {
-	int retorno=-1;
+	int functionReturn=-1;
 	int avisosPorCliente=0;
 	if(listAviso !=NULL && pCountAviso !=NULL && lenAvisos>0)
 	{
@@ -216,41 +214,39 @@ static int Aviso_calcularNumeroAvisosUnCliente(Aviso* listAviso, int lenAvisos,i
 			if(		listAviso[i].isEmpty == FALSE   &&
 					listAviso[i].estado == 1 		&&
 					listAviso[i].idCliente == id	)
-			{
+			 {
 				avisosPorCliente++;
-			}
+			 }
 		}
 		*pCountAviso = avisosPorCliente;
-		retorno=0;
+		functionReturn=0;
 	}
-	return retorno;
+	return functionReturn;
 }
 
 /** \brief Search the id of a client through the publication id
  * \param Aviso *listAviso : list to go
  * \param int lenAvisos: Aviso array length
- * \param int idPublicacion: Id of a post
+ * \param int idAviso: Id of a post
  * \param int pID: Pointer that will have the client ID
  * \return (-1) if something went wrong, (0) if everything is OK.
  */
-int Aviso_findID_ByPublicacion_index(Aviso *listAviso,int lenAviso,int idPublicacion,int *pID)
+int Aviso_findID_ByPublicacion_index(Aviso *listAviso,int lenAviso,int idAviso,int *pID)
 {
-int retorno=-1;
-
+int functionReturn=-1;
 	if(listAviso!=NULL && lenAviso>0 && pID!=NULL)
 	{
 		for(int i=0; i<lenAviso;i++)
 		{
-			if(listAviso[i].id == idPublicacion)
+			if(listAviso[i].id == idAviso)
 			{
 				*pID = listAviso[i].idCliente;
-				retorno=0;
+				functionReturn=0;
 				break;
 			}
 		}
-
 	}
-return retorno;
+return functionReturn;
 }
 
 /** \brief Scrolls the list for an ID and returns the index
@@ -262,7 +258,7 @@ return retorno;
  */
 int Aviso_findByID_index(Aviso *listAviso,int lenAviso,int id,int *pIndex)
 {
-	int retorno=-1;
+	int functionReturn=-1;
 
 	if(listAviso!=NULL && lenAviso>0 && pIndex !=NULL)
 	{
@@ -271,12 +267,12 @@ int Aviso_findByID_index(Aviso *listAviso,int lenAviso,int id,int *pIndex)
 			if(listAviso[i].id==id && listAviso[i].isEmpty == FALSE)
 			{
 				*pIndex=i;
-				retorno=0;
+				functionReturn=0;
 				break;
 			}
 		}
 	}
-	return retorno;
+	return functionReturn;
 }
 
 /** \brief It will allow to create a new publication requesting the client's ID, its category and the content of the publication.
@@ -306,7 +302,10 @@ int Aviso_alta(Aviso *listAviso, int len,Cliente *listCliente, int lenCliente)
 			printf("\nSu publicacion tiene el ID : %d\n",listAviso[index].id);
 			functionReturn=0;
 		}
+		else
+		{
 		printf("\nERROR! Hubo en error en la toma de datos.\n");
+		}
 	}
 	else
 	{
@@ -321,9 +320,9 @@ int Aviso_alta(Aviso *listAviso, int len,Cliente *listCliente, int lenCliente)
  * \param int id: Customer ID from which the publications will be downloaded
  * \return (-1) if something went wrong, (0) if everything is OK.
  */
-static int Aviso_bajarTodasLasPublicacionDeunID(Aviso *listAviso, int lenAviso, int id)
+static int unsubscribeAClientPostsById(Aviso *listAviso, int lenAviso, int id)
 {
-int retorno = -1;
+int functionReturn = -1;
 	if(listAviso!=NULL && lenAviso>0)
 	{
 		for(int i=0;i<lenAviso;i++)
@@ -332,10 +331,10 @@ int retorno = -1;
 			{
 				listAviso[i].isEmpty=TRUE;
 			}
-			retorno=0;
+			functionReturn=0;
 		}
 	}
-return retorno;
+return functionReturn;
 }
 
 /** \brief Unsubscribe a client, his ID is requested, all his publications will be printed and if he makes the confirmation they will be unsubscribed
@@ -348,21 +347,22 @@ return retorno;
 int Aviso_baja(Aviso *listAviso, int len,Cliente *listCliente, int lenCliente)
 {
 	int idToFind;
-	int indexToDelete;
 	int functionReturn = -1;
 	int flagDelete;
 
 	if (listAviso != NULL && len > 0 && Aviso_isEmpty(listAviso, len)==0 && Cliente_isEmpty(listCliente, lenCliente)==0)
 	 {
-			if( utn_getInt("\nIngrese ID de cliente a eliminar: ",ERROR, &idToFind, ATTEMPTS, INT_MIN,INT_MAX)==0   &&
-				Cliente_findID_returnINDEX(listCliente, lenCliente, idToFind, &indexToDelete)==0    				&&
-				AvisoCliente_print(listAviso, len,idToFind)==0                            )
+			if( Aviso_printDataFromBothEntities(listAviso, listCliente, len, lenCliente) ==0						&&
+				utn_getInt("\nIngrese ID de cliente a eliminar: ",ERROR, &idToFind, ATTEMPTS, INT_MIN,INT_MAX)==0   &&
+				Cliente_findID(listCliente, lenCliente, idToFind)==0 												&&
+				Aviso_printDataByIDClient(listAviso, len,idToFind)==0                            					)
 			{
 				utn_getInt("\nSeguro desea eliminar las publicaciones?: \n1)>SI\n2)>NO",ERROR, &flagDelete, ATTEMPTS, 1, 2);
 
-				if(flagDelete==1 && Aviso_bajarTodasLasPublicacionDeunID(listAviso, len, idToFind)==0)
+				if(flagDelete==1 && unsubscribeAClientPostsById(listAviso, len, idToFind)==0)
 				{
 						Cliente_removeByID(listCliente, lenCliente, idToFind);
+						printf("\nBAJA realizada con exito. \n");
 						functionReturn=0;
 				}
 				else
@@ -391,30 +391,28 @@ int Aviso_baja(Aviso *listAviso, int len,Cliente *listCliente, int lenCliente)
  */
 int Aviso_pausar(Aviso *listAviso, int lenAviso,Cliente *listCliente, int lenCliente)
 {
-		int retorno=-1;
-		int idPublicacion=0;
+		int functionReturn=-1;
+		int idAviso=0;
 		int idCliente;
-		int index;
 		int flagModificarAviso;
 
 			if(listAviso!=NULL && listCliente !=NULL && lenAviso>0 && lenCliente >0 && Cliente_isEmpty(listCliente, lenCliente)==0)
 			{
-				if( utn_getInt("\nIngrese ID Publicacion: ",ERROR, &idPublicacion, ATTEMPTS, 0,INT_MAX)==0  					    &&
-					Aviso_findID_ByPublicacion_index(listAviso, lenAviso, idPublicacion, &idCliente)==0 								    &&
-					Aviso_findByID_index(listAviso, lenAviso, idCliente, &index)==0 													    &&
-					thisIdHasActivePosts(listAviso, lenAviso, idCliente)==0															&&
-					AvisoCliente_print(listAviso, lenAviso,idCliente)==0									    &&
-					utn_getInt("\nCambiar publicacion a >pausada< ""\n1)SI""\n0)NO", ERROR, &flagModificarAviso, ATTEMPTS, 0,1)==0  )
+				if( Aviso_printDataFromBothEntities(listAviso, listCliente, lenAviso, lenCliente)==0												&&
+					utn_getInt("\nIngrese ID del Aviso a pausar: ",ERROR, &idAviso, ATTEMPTS, 0,INT_MAX)==0  					  			  		&&
+					Aviso_findID_ByPublicacion_index(listAviso, lenAviso, idAviso, &idCliente)==0 													&&
+					checkPostStatus(listAviso, lenAviso, idAviso,AVISO_ACTIVE)==0																	&&
+					Aviso_printDataByIDClient(listAviso, lenAviso,idCliente)==0									    								&&
+					utn_getInt("\nQuiere cambiar el estado del aviso a  >PAUSADA< ? \n1)SI \n0)NO", ERROR, &flagModificarAviso, ATTEMPTS, 0,1)==0  	)
 				{
-					if(flagModificarAviso==1)
+					if(flagModificarAviso==1 && unsubscribeAPostByItsId(listAviso, lenAviso, idAviso,0)==0)
 					{
-						listAviso[index].estado=0;
-						retorno=0;
-						printf("\nCambios realizados exitosamente.");
+						functionReturn=0;
+						printf("\nCambios realizados exitosamente.\n");
 					}
 					else
 					{
-						printf("\nNo se realizaron cambios...");
+						printf("\nNo se realizaron cambios...\n");
 					}
 				}
 			}
@@ -423,7 +421,32 @@ int Aviso_pausar(Aviso *listAviso, int lenAviso,Cliente *listCliente, int lenCli
 				printf("\nERROR! No hay publicaciones cargadas.\n");
 			}
 
-	return retorno;
+	return functionReturn;
+}
+
+/** \brief The id of a publication is requested and the information will be printed, confirmation will be requested to change its status to active
+ * \param Aviso *listAviso : list to go
+ * \param int lenAviso: Aviso array length
+ * \param Cliente *listCliente : list to go
+ * \param int lenCliente: Cliente array length
+ * \return (-1) if something went wrong, (0) if everything is OK.
+ */
+static int unsubscribeAPostByItsId(Aviso *listAviso,int lenAviso,int idAviso,int estado)
+{
+	int functionReturn=-1;
+	if(listAviso!=NULL && lenAviso>0 && idAviso >-1)
+	{
+		for(int i=0;i<lenAviso;i++)
+		{
+			if(listAviso[i].isEmpty== FALSE && listAviso[i].id==idAviso && listAviso[i].estado!=estado)
+			{
+				listAviso[i].estado=estado;
+				functionReturn=0;
+				break;
+			}
+		}
+	}
+	return functionReturn;
 }
 
 /** \brief The id of a publication is requested and the information will be printed, confirmation will be requested to change its status to active
@@ -435,44 +458,49 @@ int Aviso_pausar(Aviso *listAviso, int lenAviso,Cliente *listCliente, int lenCli
  */
 int Aviso_activar(Aviso *listAviso, int lenAviso,Cliente *listCliente, int lenCliente)
 {
-	int retorno=-1;
-	int idPublicacion;
+	int functionReturn=-1;
+	int idAviso;
 	int idCliente;
-	int index;
 	int flagModificarAviso;
 
 		if(listAviso!=NULL && listCliente !=NULL && lenAviso>0 && lenCliente >0 && Cliente_isEmpty(listCliente, lenCliente)==0)
 		{
-			if( utn_getInt("\nIngrese ID Publicacion: ",ERROR, &idPublicacion, ATTEMPTS, 0,INT_MAX)==0  					    &&
-					Aviso_findID_ByPublicacion_index(listAviso, lenAviso, idPublicacion, &idCliente)==0 						&&
-					Aviso_findByID_index(listAviso, lenAviso, idCliente, &index)==0 											&&
-					thisIdHasPausedPosts(listAviso, lenAviso, idCliente)==0														&&
-					AvisoCliente_print(listAviso, lenAviso,idCliente)==0								&&
-					utn_getInt("\nCambiar publicacion a >activa< ""\n1)SI""\n0)NO", ERROR, &flagModificarAviso, ATTEMPTS, 0,1)==0)
+			if( 	Aviso_printDataFromBothEntities(listAviso, listCliente, lenAviso, lenCliente)==0											&&
+					utn_getInt("\nIngrese ID del Aviso a activar",ERROR, &idAviso, ATTEMPTS, 0,INT_MAX)==0  									&&
+					Aviso_findID_ByPublicacion_index(listAviso, lenAviso, idAviso, &idCliente)==0 												&&
+					checkPostStatus(listAviso, lenAviso, idAviso,AVISO_PAUSE)==0																&&
+					Aviso_printDataByIDClient(listAviso, lenAviso,idCliente)==0																	&&
+					utn_getInt("\nQuiere cambiar el estado del aviso a  >ACTIVA< ?\n1)SI\n0)NO", ERROR, &flagModificarAviso, ATTEMPTS, 0,1)==0	)
 			{
-				if(flagModificarAviso==1)
+				if(flagModificarAviso==1 && unsubscribeAPostByItsId(listAviso, lenAviso, idAviso,1)==0)
 				{
-					listAviso[index].estado=1;
-					retorno=0;
-					printf("\nCambios realizados exitosamente.");
+					functionReturn=0;
+					printf("\nCambios realizados exitosamente.\n");
 				}
-				else{printf("\nNo se realizaron cambios...");}
+				else
+				{
+					printf("\nNo se realizaron cambios...");
+				}
 			}
-		}else
-		{
-			printf("\nERROR! No hay datos cargados.\n");
+			else
+			{
+				printf("\nHubo un error activando el aviso.\n");
+			}
 		}
-	return retorno;
+		else
+		{
+			printf("\nERROR! No hay publicaciones cargadas.\n");
+		}
+	return functionReturn;
 }
 
-
-/** \brief Request a customer id and check if you have posts in paused state
+/** \brief Request the id of a publication and check its status
  * \param Aviso *listAviso : list to go
  * \param int lenAviso: Aviso array length
  * \param int idCliente: Customer id to check for paused posts
  * \return (-1) if something went wrong, (0) if everything is OK.
  */
-static int thisIdHasPausedPosts(Aviso *listAviso,int lenAviso,int idCliente)
+static int checkPostStatus(Aviso *listAviso,int lenAviso,int idCliente,int estado)
 {
 	int functionReturn=-1;
 	int flag;
@@ -481,49 +509,76 @@ static int thisIdHasPausedPosts(Aviso *listAviso,int lenAviso,int idCliente)
 		flag=FALSE;
 		for(int i=0; i<lenAviso;i++)
 		{
-			if(listAviso[i].isEmpty==FALSE && listAviso[i].estado== 0 && listAviso[i].idCliente == idCliente)
+			if(listAviso[i].isEmpty==FALSE && listAviso[i].estado==estado && listAviso[i].id == idCliente)
 			{
-
 				functionReturn= 0;
 				flag=TRUE;
 			}
-
 		}
 		if(flag==FALSE)
 		{
-			printf("\nERROR! El id no tiene publicaciones pausadas\n");
+			printf("\nERROR! Revise el estado de la publicacion.\n");
 		}
 	}
 return functionReturn;
 }
 
-/** \brief Request a customer id and check if you have posts in active state
+/** \brief Prints the status of the publications and clients indexed by their id
  * \param Aviso *listAviso : list to go
  * \param int lenAviso: Aviso array length
  * \param int idCliente: Customer id to check for paused posts
  * \return (-1) if something went wrong, (0) if everything is OK.
  */
-static int thisIdHasActivePosts(Aviso *listAviso,int lenAviso,int idCliente)
+int Aviso_printDataFromBothEntities(Aviso *listAviso, Cliente *listCliente, int lenAviso, int lenCliente)
 {
 	int functionReturn=-1;
-	int flag;
-	if(listAviso!=NULL && lenAviso>0 && idCliente>0 && Aviso_isEmpty(listAviso, lenAviso)==0)
+	if(listAviso!=NULL && listCliente!=NULL && lenCliente>0 && lenAviso>0 &&  Aviso_isEmpty(listAviso, lenAviso)==0 && Cliente_isEmpty(listCliente, lenCliente)==0)
 	{
-		flag=FALSE;
+		printf("\nAVISOS         ID_AVISO      ESTADO           NOMBRE          APELLIDO     ID_CLIENTE        CUIT      	       RUBRO");
 		for(int i=0; i<lenAviso;i++)
 		{
-			if(listAviso[i].isEmpty==FALSE && listAviso[i].estado==1 && listAviso[i].idCliente == idCliente)
-			{
-
-				functionReturn= 0;
-				flag=TRUE;
-			}
-
+			joinDataFromBothEntities(listAviso, listCliente, lenAviso, lenCliente,i);
 		}
-		if(flag==FALSE)
+		functionReturn=0;
+		printf("\n");
+	}
+	return functionReturn;
+}
+
+/** \brief Join the data of both entities indexed by their id
+ * \param Aviso *listAviso : list to go
+ * \param int lenAviso: Aviso array length
+ * \param int idCliente: Customer id to check for paused posts
+ * \param int posicion: Position from which the information of the notice list will be searched
+ * \return (-1) if something went wrong, (0) if everything is OK.
+ */
+static int joinDataFromBothEntities(Aviso *listAviso, Cliente *listCliente, int lenAviso, int lenCliente,int posicion)
+{
+	int functionReturn=-1;
+	char status[8];
+	if(listAviso!=NULL && listCliente!=NULL && lenCliente>0 && lenAviso>0 &&  Aviso_isEmpty(listAviso, lenAviso)==0 && Cliente_isEmpty(listCliente, lenCliente)==0)
+	{
+		for(int x=0;x<lenCliente;x++)
 		{
-			printf("\nERROR! El id no tiene publicaciones activas.\n");
+			if(listCliente[x].isEmpty==FALSE && listCliente[x].id == listAviso[posicion].idCliente)
+			{
+				if (listAviso[posicion].estado == 1 )
+				{
+					strncpy(status,"ACTIVA",8);
+				}
+				else
+				{
+					strncpy(status,"PAUSADA",8);
+				}
+			printf("\n%-18s %-8d  %-15s  %-15s %-15s %-14d %-6s %6d",listAviso[posicion].textoAviso,listAviso[posicion].id,status,listCliente[x].nombre,listCliente[x].apellido,listCliente[x].id,listCliente[x].cuit,listAviso[posicion].rubro);
+
+			}
 		}
+		functionReturn=0;
+	}
+	else
+	{
+		printf("\nNo hay datos cargados.");
 	}
 return functionReturn;
 }
@@ -534,87 +589,95 @@ return functionReturn;
  */
 void Aviso_cargaAutomatica(Aviso *listAviso)
 {
-	strncpy(listAviso[1].textoAviso,"Aviso1",LONG_AVISO);
+	strncpy(listAviso[1].textoAviso,"Venta de autos",LONG_AVISO);
 			listAviso[1].id =Aviso_generateNewID();
-			listAviso[1].estado = 1;
+			listAviso[1].estado = 1; //ACTIVA 1
 			listAviso[1].idCliente =1;
 			listAviso[1].isEmpty = FALSE;
 			listAviso[1].rubro = 1;
 
-	strncpy(listAviso[3].textoAviso,"Aviso2",LONG_AVISO);
+	strncpy(listAviso[3].textoAviso,"Venta de motos",LONG_AVISO);
 			listAviso[3].id =Aviso_generateNewID();
-			listAviso[3].estado = 1;
+			listAviso[3].estado = 0; //PAUSA 0
 			listAviso[3].idCliente =2;
 			listAviso[3].isEmpty = FALSE;
 			listAviso[3].rubro = 1;
 
-	strncpy(listAviso[5].textoAviso,"Aviso3",LONG_AVISO);
+	strncpy(listAviso[5].textoAviso,"Venta de trineos",LONG_AVISO);
 			listAviso[5].id =Aviso_generateNewID();
-			listAviso[5].estado = 1;
+			listAviso[5].estado = 1; //ACTIVA 1
 			listAviso[5].idCliente =3;
 			listAviso[5].isEmpty = FALSE;
 			listAviso[5].rubro = 1;
 
-	strncpy(listAviso[7].textoAviso,"Aviso4",LONG_AVISO);
+	strncpy(listAviso[7].textoAviso,"Venta de skate",LONG_AVISO);
 			listAviso[7].id =Aviso_generateNewID();
-			listAviso[7].estado = 1; //activa
+			listAviso[7].estado = 1; //ACTIVA 1
 			listAviso[7].idCliente =4;
 			listAviso[7].isEmpty = FALSE;
 			listAviso[7].rubro = 2;
 
-	strncpy(listAviso[9].textoAviso,"Aviso5",LONG_AVISO);
+	strncpy(listAviso[9].textoAviso,"Venta de bicicleta",LONG_AVISO);
 			listAviso[9].id =Aviso_generateNewID();
-			listAviso[9].estado = 1; //activa
+			listAviso[9].estado = 1; //ACTIVA 1
 			listAviso[9].idCliente =5;
 			listAviso[9].isEmpty = FALSE;
 			listAviso[9].rubro = 3;
 
-	strncpy(listAviso[11].textoAviso,"Aviso6",LONG_AVISO);
+	strncpy(listAviso[11].textoAviso,"Venta de camion",LONG_AVISO);
 			listAviso[11].id =Aviso_generateNewID();
-			listAviso[11].estado = 1; //activa
+			listAviso[11].estado = 0; //PAUSA 0
 			listAviso[11].idCliente =6;
 			listAviso[11].isEmpty = FALSE;
 			listAviso[11].rubro =4;
 
-	strncpy(listAviso[13].textoAviso,"Aviso7",LONG_AVISO);
+	strncpy(listAviso[13].textoAviso,"Venta de ruedas",LONG_AVISO);
 			listAviso[13].id =Aviso_generateNewID();
-			listAviso[13].estado = 1; //activa
+			listAviso[13].estado = 1; //ACTIVA 1
 			listAviso[13].idCliente =7;
 			listAviso[13].isEmpty = FALSE;
 			listAviso[13].rubro = 4;
 
-	strncpy(listAviso[15].textoAviso,"Aviso8",LONG_AVISO);
+	strncpy(listAviso[15].textoAviso,"Venta de sillas",LONG_AVISO);
 			listAviso[15].id =Aviso_generateNewID();
-			listAviso[15].estado = 1; //activa
+			listAviso[15].estado = 1; //ACTIVA 1
 			listAviso[15].idCliente =8;
 			listAviso[15].isEmpty = FALSE;
 			listAviso[15].rubro =4;
 
-	strncpy(listAviso[17].textoAviso,"Aviso9",LONG_AVISO);
+	strncpy(listAviso[17].textoAviso,"Venta de monitor",LONG_AVISO);
 			listAviso[17].id =Aviso_generateNewID();
-			listAviso[17].estado = 0; //activa
+			listAviso[17].estado = 0; //PAUSA 0
 			listAviso[17].idCliente =9;
 			listAviso[17].isEmpty = FALSE;
 			listAviso[17].rubro =4;
 
-	strncpy(listAviso[19].textoAviso,"Aviso10",LONG_AVISO);
+	strncpy(listAviso[19].textoAviso,"Venta de gabinete",LONG_AVISO);
 			listAviso[19].id =Aviso_generateNewID();
-			listAviso[19].estado = 1; //activa
+			listAviso[19].estado = 1; //ACTIVA 1
 			listAviso[19].idCliente =10;
 			listAviso[19].isEmpty = FALSE;
 			listAviso[19].rubro = 4;
 
-	strncpy(listAviso[21].textoAviso,"Aviso11",LONG_AVISO);
+	strncpy(listAviso[21].textoAviso,"Venta de RAM",LONG_AVISO);
 			listAviso[21].id =Aviso_generateNewID();
-			listAviso[21].estado = 1;
-			listAviso[21].idCliente =1;
+			listAviso[21].estado = 1; //ACTIVA 1
+			listAviso[21].idCliente =2;
 			listAviso[21].isEmpty = FALSE;
 			listAviso[21].rubro = 4;
 
-	strncpy(listAviso[23].textoAviso,"Aviso12",LONG_AVISO);
+	strncpy(listAviso[23].textoAviso,"Venta de mouse",LONG_AVISO);
 			listAviso[23].id =Aviso_generateNewID();
-			listAviso[23].estado = 1;
-			listAviso[23].idCliente =1;
+			listAviso[23].estado = 0; //PAUSA 0
+			listAviso[23].idCliente =2;
 			listAviso[23].isEmpty = FALSE;
 			listAviso[23].rubro =4;
+
+	strncpy(listAviso[25].textoAviso,"Venta de CPU",LONG_AVISO);
+			listAviso[25].id =Aviso_generateNewID();
+			listAviso[25].estado = 1; //ACTIVA 1
+			listAviso[25].idCliente =2;
+			listAviso[25].isEmpty = FALSE;
+			listAviso[25].rubro = 4;
+
 }

@@ -4,15 +4,14 @@
  *  Created on: 11 oct. 2020
  *      Author: l.rojas
  */
-
 #include <stdio.h>
 #include "utn.h"
 #include "aviso.h"
 #include "cliente.h"
 #include "informe.h"
 
-
-static int Informe_calcularAvisos(Aviso* listAviso, int lenAvisos,int id, int *pCountAviso,int estado);
+static int calculateNumberOfPostsInCertainState(Aviso* listAviso, int lenAvisos,int id, int *pCountAviso,int estado);
+static int calculateRepeatedItem(Aviso *listAviso, int lenAviso, int rubro, int *pContador);
 
 /**
  * \brief Print the number of paused notices
@@ -23,30 +22,30 @@ static int Informe_calcularAvisos(Aviso* listAviso, int lenAvisos,int id, int *p
  * \param int estado: status of the publication of which you want to consult
  * \return (-1) if something went wrong, (0) if everything is OK.
  */
-int Informe_cantidadDeAvisosPausados(Aviso *listAviso, int lenAvisos,Cliente *listCliente,int lenCliente,int estado)
+int Informe_cantidadDeAvisosPausados(Aviso *listAviso, int lenAvisos,Cliente *listCliente,int lenCliente)
 {
-	int retorno = -1;
-	int actualCounter;
-	int maxContador;
+	int functionReturn = -1;
+	int contador=0;
 
 	if(listAviso !=NULL && listCliente !=NULL && lenAvisos>0 && lenCliente>0 && Aviso_isEmpty(listAviso, lenAvisos)==0)
 	{
-		for(int i=0;i<lenCliente;i++)
+		for(int i=0; i<lenAvisos; i++)
 		{
-			Informe_calcularAvisos(listAviso,lenAvisos,listCliente[i].id,&actualCounter,estado);
-			if(i==0 || actualCounter>maxContador)
+			if(listAviso[i].isEmpty == FALSE)
 			{
-				maxContador = actualCounter;
+				if(listAviso[i].estado == 0)
+				{
+					contador++;
+				}
 			}
 		}
-		printf("\nCANTIDAD AVISOS PAUSADOS ->  %d\n",maxContador);
-		retorno=0;
+		printf("\nCANTIDAD AVISOS PAUSADOS ->  %d \n",contador);
 	}
 	else
 	{
-		printf("\nNo hay datos cargados.\n");
+		printf("\nERROR! No hay datos cargados.\n");
 	}
-	return retorno;
+	return functionReturn;
 }
 
 /**
@@ -58,33 +57,32 @@ int Informe_cantidadDeAvisosPausados(Aviso *listAviso, int lenAvisos,Cliente *li
  * \param int estado: status of the publication of which you want to consult
  * \return (-1) if something went wrong, (0) if everything is OK.
  */
-int Informe_imprimirClienteAvisosACTIVOS(Aviso* listAviso, int lenAvisos,Cliente *listCliente,int lenCliente,int estado)
+int Informe_imprimirClienteAvisosACTIVOS(Aviso* listAviso, int lenAvisos,Cliente *listCliente,int lenCliente)
 {
-	int retorno = -1;
-	int actualCounter;
+	int functionReturn = -1;
+	int contador;
 	int maxContador;
 	Cliente bufferMaxCliente;
-
 	if(listAviso !=NULL && listCliente !=NULL && lenAvisos>0 && lenCliente>0  && Aviso_isEmpty(listAviso, lenAvisos)==0)
 	{
-		printf("\nNOMBRE          APELLIDO        CUIT             ID        CANTIDAD DE AVISOS  \n");
+		printf("\nNOMBRE          APELLIDO        CUIT                ID     CANTIDAD DE AVISOS ACTIVOS");
 		for(int i=0;i<lenCliente;i++)
 		{
-			Informe_calcularAvisos(listAviso,lenAvisos,listCliente[i].id,&actualCounter,estado);
-			if(i==0 || actualCounter>maxContador)
+			calculateNumberOfPostsInCertainState(listAviso,lenAvisos,listCliente[i].id,&contador,ACTIVE_POST);
+			if(i==0 || contador>maxContador)
 			{
-				maxContador = actualCounter;
+				maxContador = contador;
 				bufferMaxCliente = listCliente[i];
 			}
 		}
 		printf("\n%-15s %-15s %4s %7d %15d\n",bufferMaxCliente.nombre,bufferMaxCliente.apellido,bufferMaxCliente.cuit,bufferMaxCliente.id,maxContador);
-		retorno=0;
+		functionReturn=0;
 	}
 	else
 	{
-		printf("\nNo hay datos cargados.\n");
+		printf("\nERROR! No hay datos cargados.\n");
 	}
-	return retorno;
+	return functionReturn;
 }
 
 /**
@@ -96,40 +94,27 @@ int Informe_imprimirClienteAvisosACTIVOS(Aviso* listAviso, int lenAvisos,Cliente
  * \param int estado: status of the publication of which you want to consult
  * \return (-1) if something went wrong, (0) if everything is OK.
  */
-static int Informe_calcularAvisos(Aviso* listAviso, int lenAvisos,int id, int *pCountAviso,int estado)
+static int calculateNumberOfPostsInCertainState(Aviso* listAviso, int lenAvisos,int id, int *pCountAviso,int estado)
 {
-	int retorno=-1;
+	int functionReturn=-1;
 	int avisosPorCliente=0;
 
-	for(int i=0; i<lenAvisos; i++)
+	if(listAviso!=NULL && lenAvisos>0 && id>0)
 	{
-
-		if(listAviso[i].isEmpty == FALSE   && listAviso[i].idCliente == id)
+		for(int i=0; i<lenAvisos; i++)
 		{
-			switch(estado)
+			if(listAviso[i].isEmpty == FALSE   && listAviso[i].idCliente == id)
 			{
-				case 1:
-					if(listAviso[i].estado == 0)
-					{
-						avisosPorCliente++;
-					}
-				break;
-
-				case 2:
-					if(listAviso[i].estado == 1)
-					{
-						avisosPorCliente++;
-					}
-				break;
-
-				default:avisosPorCliente++;
-				break;
+				if(listAviso[i].estado == estado)
+				{
+					avisosPorCliente++;
+				}
 			}
 		}
 	}
 	*pCountAviso = avisosPorCliente;
-	retorno=0;
-	return retorno;
+	functionReturn=0;
+	return functionReturn;
 }
 
 /**
@@ -143,8 +128,8 @@ static int Informe_calcularAvisos(Aviso* listAviso, int lenAvisos,int id, int *p
 
 int Informe_cantidadDeAvisosMAX(Aviso *listAviso, int lenAvisos,Cliente *listCliente,int lenCliente,int estado)
 {
-	int retorno = -1;
-	int actualCounter;
+	int functionReturn = -1;
+	int contador;
 	int maxContador;
 	Cliente bufferMaxCliente;
 
@@ -153,18 +138,18 @@ int Informe_cantidadDeAvisosMAX(Aviso *listAviso, int lenAvisos,Cliente *listCli
 		printf("\nNOMBRE          APELLIDO        CUIT             CANTIDAD DE AVISOS\n");
 		for(int i=0;i<lenCliente;i++)
 		{
-			Informe_calcularAvisos(listAviso,lenAvisos,listCliente[i].id,&actualCounter,estado);
-			if(i==0 || actualCounter>maxContador)
+			calculateNumberOfPostsInCertainState(listAviso,lenAvisos,listCliente[i].id,&contador,estado);
+			if(i==0 || contador>maxContador)
 			{
-				maxContador = actualCounter;
+				maxContador = contador;
 				bufferMaxCliente = listCliente[i];
 			}
 		}
 		printf("\n>CANTIDAD DE AVISOS MAX  %d",maxContador);
 		printf("\n%-15s %-15s %4s %15d \n",bufferMaxCliente.nombre,bufferMaxCliente.apellido,bufferMaxCliente.cuit,maxContador);
-		retorno=0;
+		functionReturn=0;
 	}
-	return retorno;
+	return functionReturn;
 }
 */
 
@@ -178,14 +163,14 @@ int Informe_cantidadDeAvisosMAX(Aviso *listAviso, int lenAvisos,Cliente *listCli
 int informe_rubroConMasAviso(Aviso *listAviso, int lenAvisos)
 {
 	int functionReturn=-1;
-	int contador=0;
+	int contador;
 	int maxContador;
 	int aux;
 	if(listAviso!=NULL && lenAvisos>0 && Aviso_isEmpty(listAviso, lenAvisos)==0)
 	{
 		for(int i=0;i<lenAvisos;i++)
 		{
-			if(listAviso[i].isEmpty == FALSE && informe_calcularRubroRepetido(listAviso,lenAvisos,listAviso[i].rubro, &contador)==0)
+			if(listAviso[i].isEmpty == FALSE && calculateRepeatedItem(listAviso,lenAvisos,listAviso[i].rubro, &contador)==0)
 			{
 				if(i==0 || contador>maxContador)
 				{
@@ -195,7 +180,7 @@ int informe_rubroConMasAviso(Aviso *listAviso, int lenAvisos)
 				}
 			}
 		}
-		printf("\nEl rubro con mas avisos es el: %d  con %d Publicaciones\n",aux,contador);
+		printf("\nEl rubro con mas avisos es el  %d  con  %d publicaciones.\n",aux,contador);
 	}
 	else
 	{
@@ -207,32 +192,26 @@ int informe_rubroConMasAviso(Aviso *listAviso, int lenAvisos)
 /**
  * \brief Calculate the number of times an item exists
  * \param Aviso *listCliente: list to scrolls
- * \param int len: Aviso array length
+ * \param int lenAviso: Aviso array length
  * \param int rubro: item to compare
- * \param int pCounter: Pointer that will have the number of times the item exists
+ * \param int pContador: Pointer that will have the number of times the item exists
  * \return (-1) if something went wrong, (0) if everything is OK.
  */
-int informe_calcularRubroRepetido(Aviso *list, int len, int rubro, int *pCounter)
+static int calculateRepeatedItem(Aviso *listAviso, int lenAviso, int rubro, int *pContador)
 {
 	int functionReturn=-1;
-	int counter=0;
-	if(list!=NULL && len>0)
+	int contador=0;
+	if(listAviso!=NULL && lenAviso>0)
 	{
-		for(int i=0;i<len;i++)
+		for(int i=0;i<lenAviso;i++)
 		{
-			if(list[i].isEmpty == FALSE && list[i].rubro == rubro)
+			if(listAviso[i].isEmpty == FALSE && listAviso[i].rubro == rubro)
 			{
-				counter++;
+				contador++;
 				functionReturn=0;
 			}
 		}
-		*pCounter = counter;
+		*pContador = contador;
 	}
 	return functionReturn;
 }
-
-
-
-
-
-

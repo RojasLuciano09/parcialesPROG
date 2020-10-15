@@ -10,6 +10,13 @@
 #define ERROR "\nError!, ingrese un dato valido: \n"
 #define LONG_AVISO 64
 #define MAX_RUBRO 10
+
+/**
+ * To check if a publication is ACTIVE
+ */
+#define AVISO_ACTIVE 1
+#define AVISO_PAUSE 0
+
 #include "cliente.h"
 
 struct
@@ -29,16 +36,15 @@ int Aviso_baja(Aviso *listAviso, int lenAviso,Cliente *listCliente, int lenClien
 int Aviso_pausar(Aviso *listAviso, int len,Cliente *listCliente, int lenCliente);
 int Aviso_activar(Aviso *listAviso, int len,Cliente *listCliente, int lenCliente);
 int Aviso_isEmpty(Aviso *listAviso, int len);
-int AvisoCliente_print(Aviso *listAviso, int len,int idCliente);
+int Aviso_printDataByIDClient(Aviso *listAviso, int len,int idCliente);
 int Aviso_print(Aviso *listAviso, int lenAviso);
 
 int Aviso_findByID_index(Aviso *listAviso,int lenAviso,int id,int *pIndex);
-int Aviso_findID_ByPublicacion_index(Aviso *listAviso,int lenAviso,int idPublicacion,int *pID);
+int Aviso_findID_ByPublicacion_index(Aviso *listAviso,int lenAviso,int idAviso,int *pID);
 int Aviso_initList(Aviso *listAviso, int lenAviso);
 int Aviso_searchFreeIndex(Aviso *listAviso, int lenAviso, int *pFreeIndex);
-
-
 int Aviso_imprimirClienteJuntoACantidadDeAvisos(Aviso* listAviso, int lenAvisos,Cliente *listCliente,int lenCliente);
 
+int Aviso_printDataFromBothEntities(Aviso *listAviso, Cliente *listCliente, int lenAviso, int lenCliente);
 
 #endif /* AVISO_H_ */

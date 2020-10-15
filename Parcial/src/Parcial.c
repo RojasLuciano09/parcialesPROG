@@ -18,10 +18,8 @@
 #define lenCliente 100
 #define lenAviso   1000
 
-
 int main(void) {
 	setbuf(stdout, NULL);
-
 
 	int opcion=0;
 	int subOpcion=0;
@@ -31,7 +29,8 @@ int main(void) {
 	Aviso_initList(listAviso, lenAviso);
 
 	do{
-	utn_getMenu("\n1) Alta de cliente: "
+	utn_getMenu("\n  ->Opciones<-   "
+				"\n1) Alta de cliente: "
 				"\n2) Modificar datos de cliente: "
 				"\n3) Baja de cliente: "
 				"\n4) Publicar: "
@@ -41,7 +40,7 @@ int main(void) {
 				"\n8) Informar:"
 				"\n9) Print normal: "
 				"\n10) CargaAutomatica: "
-				"\n0)Salir",&opcion, ATTEMPTS, 0, 20);
+				"\n0)Salir",&opcion, ATTEMPTS, 0, 10);
 	switch(opcion)
 		{
 
@@ -74,18 +73,18 @@ int main(void) {
 	break;
 
 	case 8:
-		utn_getMenu("\n1) Cliente con más aviso."
+		utn_getMenu("\n1) Cliente con más avisos."
 					"\n2) Cantidad de avisos pausados."
 					"\n3) Rubro con mas avisos. "
 					,&subOpcion, ATTEMPTS, 1, 3);
 						switch(subOpcion)
 						{
 						case 1:
-							Informe_imprimirClienteAvisosACTIVOS(listAviso, lenAviso, ClienteList, lenCliente,2);
+							Informe_imprimirClienteAvisosACTIVOS(listAviso, lenAviso, ClienteList, lenCliente);
 							break;
 
 						case 2:
-							Informe_cantidadDeAvisosPausados(listAviso, lenAviso, ClienteList, lenCliente,1);
+							Informe_cantidadDeAvisosPausados(listAviso, lenAviso, ClienteList, lenCliente);
 							break;
 
 						case 3:
@@ -94,15 +93,15 @@ int main(void) {
 						}
 	break;
 
-	case 9: //Estos prints informan los datos cargados de Clientes y Avisos.
-		Cliente_print(ClienteList, lenCliente);
-		Aviso_print(listAviso, lenAviso);
+	case 9: //Informa los datos cargados de   Clientes y Aviso indexados por su ID.
+		Aviso_printDataFromBothEntities(listAviso, ClienteList, lenAviso, lenCliente);
 	break;
 
 	case 10://Realizan una carga automatica de datos linkeados por ID
 		ClienteCargaAutomatica(ClienteList);
 		Aviso_cargaAutomatica(listAviso);
 		break;
+
 		}
 	}while(opcion!=0);
 		printf("\nFuera\n");

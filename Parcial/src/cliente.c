@@ -11,7 +11,6 @@
 
 static int UpperFirstChar(char *string);
 
-
 /**
  * \brief Function to converts an string to lowercase and it first letter to uppercase
  * \param char *string: receive an string, preferents a name
@@ -116,8 +115,8 @@ int Cliente_initList(Cliente *listCliente, int lenCliente)
 	{
 		for(int i=0; i<lenCliente;i++)
 		{
-		listCliente[i].id= -1;
-		listCliente[i].isEmpty=TRUE;
+			listCliente[i].id= -1;
+			listCliente[i].isEmpty=TRUE;
 		}
 		functionReturn=0;
 	}
@@ -202,11 +201,13 @@ int Cliente_removeByID(Cliente *listCliente, int lenCliente,int idToDelete)
 	if(listCliente!=NULL && lenCliente>0)
 	{
 		for(int i=0;i<lenCliente;i++)
+		{
 			if(Cliente_findID_returnINDEX(listCliente,lenCliente,idToDelete,&indexToDelete)==0)
 			{
-					listCliente[indexToDelete].isEmpty=TRUE;
-					functionReturn=0;
+				listCliente[indexToDelete].isEmpty=TRUE;
+				functionReturn=0;
 			}
+		}
 	}
 	return functionReturn;
 }
@@ -266,6 +267,7 @@ int Cliente_findByCuit(Cliente *listCliente, int lenCliente,char *cuit)
 		{
 			if(listCliente[i].isEmpty == FALSE && strcmp(listCliente[i].cuit,cuit) == 0)
 			{
+				printf("Ese cuit ya existe.");
 				retorno = 0;
 				break;
 			}
@@ -288,14 +290,14 @@ int Cliente_modificar(Cliente *listCliente, int lenCliente)
 	Cliente bufferCliente;
 	if(listCliente != NULL && lenCliente>0 && Cliente_isEmpty(listCliente, lenCliente)==0)
 	{
+		Cliente_print(listCliente, lenCliente);
 		if(
-				utn_getInt("\nIngrese el ID a modificar: ",ERROR,&idToModify,ATTEMPTS,INT_MIN,INT_MAX)==0 	&&
+				utn_getInt("Ingrese el ID a modificar: ",ERROR,&idToModify,ATTEMPTS,INT_MIN,INT_MAX)==0 	&&
 				Cliente_findID_returnINDEX(listCliente,lenCliente,idToModify,&indexToModify)==0				&&
 				utn_getString("\nNombre: ",ERROR, bufferCliente.nombre, ATTEMPTS, LONG_NAME)==0      	 	&&
 				utn_getString("\nApellido: ",ERROR, bufferCliente.apellido, ATTEMPTS, LONG_NAME)==0   		&&
 				utn_getCuit("\nCUIT: ", ERROR, bufferCliente.cuit,ATTEMPTS,CUIT_SIZE)==0					&&
-				Cliente_findByCuit(listCliente, lenCliente, bufferCliente.cuit)!=0
-		)
+				Cliente_findByCuit(listCliente, lenCliente, bufferCliente.cuit)!=0							)
 		{
 			strncpy(listCliente[indexToModify].nombre,bufferCliente.nombre, LONG_NAME);
 			strncpy(listCliente[indexToModify].apellido,bufferCliente.apellido, LONG_NAME);
@@ -307,78 +309,77 @@ int Cliente_modificar(Cliente *listCliente, int lenCliente)
 		{
 		printf("\nHubo un error en la toma de datos.\n");
 		}
-
 	}
 	else
 	{
-		printf("\nNo hay espacio disponible..\n");
+		printf("\nNo hay espacio disponible ó no hay datos cargados.\n");
 	}
 	return functionReturn;
 }
 
 
 /**
- * \brief Make an automatic client load.
+ * \brief Make an automatic client load.  // JUST FOR TEST //
  */
 void ClienteCargaAutomatica(Cliente *listCliente)
 {
 strncpy(listCliente[2].nombre,"USUARIO1",LONG_NAME);
 strncpy(listCliente[2].apellido,"USUARIO1",LONG_NAME);
-strncpy(listCliente[2].cuit,"23379330471",LONG_NAME);
+strncpy(listCliente[2].cuit,"23-37933047-1",LONG_NAME);
 	    listCliente[2].id = Cliente_generateNewID();
 	    listCliente[2].isEmpty = FALSE;
 
 strncpy(listCliente[4].nombre,"USUARIO2",LONG_NAME);
 strncpy(listCliente[4].apellido,"USUARIO2",LONG_NAME);
-strncpy(listCliente[4].cuit,"23379330472",LONG_NAME);
+strncpy(listCliente[4].cuit,"23-37933047-2",LONG_NAME);
 	    listCliente[4].id = Cliente_generateNewID();
 	    listCliente[4].isEmpty = FALSE;
 
 strncpy(listCliente[6].nombre,"USUARIO3",LONG_NAME);
 strncpy(listCliente[6].apellido,"USUARIO3",LONG_NAME);
-strncpy(listCliente[6].cuit,"23379330473",LONG_NAME);
+strncpy(listCliente[6].cuit,"23-37933047-3",LONG_NAME);
 	    listCliente[6].id = Cliente_generateNewID();
 	    listCliente[6].isEmpty = FALSE;
 
-strncpy(listCliente[6].nombre,"USUARIO4",LONG_NAME);
-strncpy(listCliente[6].apellido,"USUARIO4",LONG_NAME);
-strncpy(listCliente[6].cuit,"23379330474",LONG_NAME);
-	    listCliente[6].id = Cliente_generateNewID();
-	    listCliente[6].isEmpty = FALSE;
-
-strncpy(listCliente[8].nombre,"USUARIO5",LONG_NAME);
-strncpy(listCliente[8].apellido,"USUARIO5",LONG_NAME);
-strncpy(listCliente[8].cuit,"23379330475",LONG_NAME);
+strncpy(listCliente[8].nombre,"USUARIO4",LONG_NAME);
+strncpy(listCliente[8].apellido,"USUARIO4",LONG_NAME);
+strncpy(listCliente[8].cuit,"23-37933047-4",LONG_NAME);
 	    listCliente[8].id = Cliente_generateNewID();
 	    listCliente[8].isEmpty = FALSE;
 
-strncpy(listCliente[10].nombre,"USUARIO6",LONG_NAME);
-strncpy(listCliente[10].apellido,"USUARIO6",LONG_NAME);
-strncpy(listCliente[10].cuit,"23379330471",LONG_NAME);
+strncpy(listCliente[10].nombre,"USUARIO5",LONG_NAME);
+strncpy(listCliente[10].apellido,"USUARIO5",LONG_NAME);
+strncpy(listCliente[10].cuit,"23-37933047-5",LONG_NAME);
 	    listCliente[10].id = Cliente_generateNewID();
 	    listCliente[10].isEmpty = FALSE;
 
-strncpy(listCliente[12].nombre,"USUARIO7",LONG_NAME);
-strncpy(listCliente[12].apellido,"USUARIO7",LONG_NAME);
-strncpy(listCliente[12].cuit,"23379330472",LONG_NAME);
+strncpy(listCliente[12].nombre,"USUARIO6",LONG_NAME);
+strncpy(listCliente[12].apellido,"USUARIO6",LONG_NAME);
+strncpy(listCliente[12].cuit,"23-37933047-6",LONG_NAME);
 	    listCliente[12].id = Cliente_generateNewID();
 	    listCliente[12].isEmpty = FALSE;
 
-strncpy(listCliente[14].nombre,"USUARIO8",LONG_NAME);
-strncpy(listCliente[14].apellido,"USUARIO8",LONG_NAME);
-strncpy(listCliente[14].cuit,"23379330473",LONG_NAME);
+strncpy(listCliente[14].nombre,"USUARIO7",LONG_NAME);
+strncpy(listCliente[14].apellido,"USUARIO7",LONG_NAME);
+strncpy(listCliente[14].cuit,"23-37933047-7",LONG_NAME);
 	    listCliente[14].id = Cliente_generateNewID();
 	    listCliente[14].isEmpty = FALSE;
 
-strncpy(listCliente[16].nombre,"USUARIO9",LONG_NAME);
-strncpy(listCliente[16].apellido,"USUARIO9",LONG_NAME);
-strncpy(listCliente[16].cuit,"23379330478",LONG_NAME);
+strncpy(listCliente[16].nombre,"USUARIO8",LONG_NAME);
+strncpy(listCliente[16].apellido,"USUARIO8",LONG_NAME);
+strncpy(listCliente[16].cuit,"23-37933047-8",LONG_NAME);
 	    listCliente[16].id = Cliente_generateNewID();
 	    listCliente[16].isEmpty = FALSE;
 
-strncpy(listCliente[17].nombre,"USUARIO10",LONG_NAME);
-strncpy(listCliente[17].apellido,"USUARIO10",LONG_NAME);
-strncpy(listCliente[17].cuit,"23379330475",LONG_NAME);
-	    listCliente[17].id = Cliente_generateNewID();
-	    listCliente[17].isEmpty = FALSE;
+strncpy(listCliente[18].nombre,"USUARIO9",LONG_NAME);
+strncpy(listCliente[18].apellido,"USUARIO9",LONG_NAME);
+strncpy(listCliente[18].cuit,"23-37933047-9",LONG_NAME);
+	    listCliente[18].id = Cliente_generateNewID();
+	    listCliente[18].isEmpty = FALSE;
+
+strncpy(listCliente[20].nombre,"USUARIO10",LONG_NAME);
+strncpy(listCliente[20].apellido,"USUARIO10",LONG_NAME);
+strncpy(listCliente[20].cuit,"23-37933041-1",LONG_NAME);
+	    listCliente[20].id = Cliente_generateNewID();
+	    listCliente[20].isEmpty = FALSE;
 }
