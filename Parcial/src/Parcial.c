@@ -17,6 +17,9 @@
 
 #define lenCliente 100
 #define lenAviso   1000
+#define PRINT_ACTIVE 1
+#define PRINT_PAUSED 0
+#define PRINT_IN_ANY_STATE 3
 
 int main(void) {
 	setbuf(stdout, NULL);
@@ -83,7 +86,7 @@ int main(void) {
 						{
 						case 1:
 							printf("\nCliente con mas avisos: ");
-							Informe_imprimirClienteAvisosACTIVOS(listAviso, lenAviso, ClienteList, lenCliente,3);
+							Informe_imprimirAvisosEnUnCiertoEstado(listAviso, lenAviso, ClienteList, lenCliente,PRINT_IN_ANY_STATE);
 							break;
 
 						case 2:
@@ -96,12 +99,12 @@ int main(void) {
 
 						case 4:
 							printf("\nCliente con mas avisos pausados.");
-							Informe_imprimirClienteAvisosACTIVOS(listAviso, lenAviso, ClienteList, lenCliente,0);
+							Informe_imprimirAvisosEnUnCiertoEstado(listAviso, lenAviso, ClienteList, lenCliente,PRINT_PAUSED);
 						break;
 
 						case 5:
 							printf("\nCliente con mas avisos activos.");
-							Informe_imprimirClienteAvisosACTIVOS(listAviso, lenAviso, ClienteList, lenCliente,1);
+							Informe_imprimirAvisosEnUnCiertoEstado(listAviso, lenAviso, ClienteList, lenCliente,PRINT_ACTIVE);
 						break;
 
 						}

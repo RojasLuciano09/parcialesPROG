@@ -57,7 +57,7 @@ int Informe_cantidadDeAvisosPausados(Aviso *listAviso, int lenAvisos,Cliente *li
  * \param int estado: status of the publication of which you want to consult
  * \return (-1) if something went wrong, (0) if everything is OK.
  */
-int Informe_imprimirClienteAvisosACTIVOS(Aviso* listAviso, int lenAvisos,Cliente *listCliente,int lenCliente,int estado)
+int Informe_imprimirAvisosEnUnCiertoEstado(Aviso* listAviso, int lenAvisos,Cliente *listCliente,int lenCliente,int estado)
 {
 	int functionReturn = -1;
 	int contador;
@@ -128,42 +128,6 @@ static int calculateNumberOfPostsInCertainState(Aviso* listAviso, int lenAvisos,
 	functionReturn=0;
 	return functionReturn;
 }
-
-/**
- * \brief Calculate the number of alerts in any state of an ID 			// JUST FOR TEST //
- * \param Aviso *listCliente: list to scrolls
- * \param int lenAvisos: Cliente array length
- * \param Cliente *listCliente: list to scrolls
- * \param int lenCliente: Cliente array length
- * \param int estado: status of the publication of which you want to consult
- * \return (-1) if something went wrong, (0) if everything is OK.
-
-int Informe_cantidadDeAvisos(Aviso *listAviso, int lenAvisos,Cliente *listCliente,int lenCliente,int estado)
-{
-	int functionReturn = -1;
-	int contador;
-	int maxContador;
-	Cliente bufferMaxCliente;
-
-	if(listAviso !=NULL && listCliente !=NULL && lenAvisos>0 && lenCliente>0)
-	{
-		printf("\nNOMBRE          APELLIDO        CUIT             CANTIDAD DE AVISOS\n");
-		for(int i=0;i<lenCliente;i++)
-		{
-			calculateNumberOfPostsInCertainState(listAviso,lenAvisos,listCliente[i].id,&contador,estado);
-			if(i==0 || contador>maxContador)
-			{
-				maxContador = contador;
-				bufferMaxCliente = listCliente[i];
-			}
-		}
-		printf("\n>CANTIDAD DE AVISOS MAX  %d",maxContador);
-		printf("\n%-15s %-15s %4s %15d \n",bufferMaxCliente.nombre,bufferMaxCliente.apellido,bufferMaxCliente.cuit,maxContador);
-		functionReturn=0;
-	}
-	return functionReturn;
-}
-*/
 
 
 /**

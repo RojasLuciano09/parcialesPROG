@@ -681,14 +681,14 @@ void Aviso_cargaAutomatica(Aviso *listAviso)
 			listAviso[11].idCliente =7;
 			listAviso[11].isEmpty = FALSE;
 			listAviso[11].rubro =4;
-
+/*
 	strncpy(listAviso[13].textoAviso,"Venta de ruedas",LONG_AVISO);
 			listAviso[13].id =Aviso_generateNewID();
 			listAviso[13].estado = 1; //ACTIVA 1
 			listAviso[13].idCliente =7;
 			listAviso[13].isEmpty = FALSE;
 			listAviso[13].rubro = 4;
-
+*/
 	strncpy(listAviso[15].textoAviso,"Venta de sillas",LONG_AVISO);
 			listAviso[15].id =Aviso_generateNewID();
 			listAviso[15].estado = 0; //ACTIVA 1
