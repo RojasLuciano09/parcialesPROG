@@ -1,0 +1,11 @@
+1,10,3,curso PYTHON,0,0
+2,11,4,curso JS,1,0
+3,12,4,curso C,2,0,
+4,13,5,curso JAVA,1,1
+5,14,5,curso GO,2,0
+6,15,8,curso KOTLIN,0,0
+7,16,9,curso SQL,2,1
+8,17,1,curso COBOL,1,0
+9,18,12,curso PASCAL,0,0
+10,19,13,curso RUBY,1,1
+11,2,33,curso CSHARP,1,0
