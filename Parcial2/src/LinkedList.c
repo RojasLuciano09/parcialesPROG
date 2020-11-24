@@ -215,6 +215,7 @@ int ll_set(LinkedList* this, int index,void* pElement)
     	auxNode = getNode(this, index);
     	if(auxNode!=NULL)
     	{
+
 			returnAux=0;
     		auxNode->pElement = pElement;
     	}
@@ -587,26 +588,6 @@ int ll_map(LinkedList* this, int (*pFunc)(void*))
 	return output;
 }
 
-int ll_map2(LinkedList* this, int (*pFunc)(void*,void*),void* arg)
-{
-	int output=-1;
-	int len = ll_len(this);
-	void* pElement;
-	if(this!=NULL && pFunc != NULL)
-	{
-
-		for(int i = 0; i < len ; i++)
-		{
-			pElement = ll_get(this, i);
-			if(pFunc(pElement,arg)==0)
-			{
-				output = 0;
-				break;
-			}
-		}
-	}
-	return output;
-}
 
 /** \brief  ejecuta una función reductora en cada elemento de la lista, lo que da como resultado un valor de salida único.
  * \param pList LinkedList* Puntero a la lista
@@ -634,13 +615,31 @@ int ll_reduce(LinkedList* this, int (*pFunc)(void*),int* pResultado)
 	return output;
 }
 
+float ll_reduceFloat(LinkedList* this, float (*pFunc)(void*))
+{
+	float returnAux =0;
+	int len = ll_len(this);
+	void* pElemento;
+	if(this!=NULL)
+	{
+		for (int i = 0;i<len;i++)
+		{
+			pElemento=ll_get(this, i);
+			returnAux= returnAux + pFunc(pElemento);
+		}
+	}
+	return returnAux;
+}
+
+
+
 /** \brief  crea una nueva lista con todos los elementos que pasan la prueba implementada por la función criterio.
  * \param pList LinkedList* Puntero a la lista
  * \param pFunc (*pFunc) Puntero a la funcion criterio
  * \return   NULL   = algo salio mal
              Linkdlist*= OK.
  */
-LinkedList* ll_filterBySomethingCloneAndReturn(LinkedList* this, int (*pFunc)(void*))
+LinkedList* ll_filterBySomethingCloneAndReturn(LinkedList* this, int (*pFunc)(void*,void*),void* arg)
 {
 	int len = ll_len(this);
 	LinkedList* auxList = NULL;
@@ -654,7 +653,7 @@ LinkedList* ll_filterBySomethingCloneAndReturn(LinkedList* this, int (*pFunc)(vo
 			for(int i=0; i<len;i++)
 			{
 				pElement = ll_get(this, i);
-				if(pElement!=NULL && pFunc(pElement)==0)
+				if(pElement!=NULL && pFunc(pElement,arg)==0)
 				{
 					ll_add(auxList, pElement);
 				}
@@ -662,4 +661,95 @@ LinkedList* ll_filterBySomethingCloneAndReturn(LinkedList* this, int (*pFunc)(vo
 		}
 	}
 	return auxList;
+}
+
+
+/**
+ *  devuelve el indice del element que cumpla con la funcion criterio
+ */
+int ll_search(LinkedList* this,int(*pFunc)(void*,void*), void* arg)
+{
+	int out=-1;
+	void* element;
+	if(this!=NULL)
+	{
+		for(int i=0;i<ll_len(this);i++)
+		{
+			element=ll_get(this, i);
+			if(pFunc(element,arg)==0)
+			{
+				out=i;
+				break;
+			}
+		}
+	}
+	return out;
+}
+
+int ll_reduce2(LinkedList* this, int (*pFunc)(void*,void*),void* arg,int* pResultado)
+{
+	int output=-1;
+	int acumulador=0;
+	void* element;
+	if(this!=NULL && pFunc!=NULL)
+	{
+		for(int i = 0; i< ll_len(this);i++)
+		{
+			element = ll_get(this, i);
+			if(element!=NULL)
+			{
+				acumulador += pFunc(element,arg);
+			}
+		}
+		*pResultado = acumulador;
+	}
+	return output;
+}
+
+
+
+
+
+
+
+int ll_map2(LinkedList* this, int (*pFunc)(void*,void*),void* arg)
+{
+	int output=-1;
+	int len = ll_len(this);
+	void* pElement;
+	if(this!=NULL && pFunc != NULL)
+	{
+		for(int i = 0; i < len ; i++)
+		{
+			pElement = ll_get(this, i);
+			if(pFunc(pElement,arg)==0)
+			{
+				output = 0;
+				break;
+			}
+		}
+	}
+	return output;
+}
+
+int ll_map3(LinkedList* this, int (*pFunc)(void*,void*),void* arg,int* index)
+{
+	int output=-1;
+	int len = ll_len(this);
+	void* pElement;
+	if(this!=NULL && pFunc != NULL)
+	{
+		for(int i = 0; i < len ; i++)
+		{
+			pElement = ll_get(this, i);
+			if(pFunc(pElement,arg)==0)
+			{
+
+				output = 0;
+				*index = i;
+				break;
+			}
+		}
+	}
+	return output;
 }

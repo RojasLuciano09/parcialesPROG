@@ -30,40 +30,23 @@ int main(void)
 	controller_loadFromText("clientes.txt",listaCliente);
 	controller_loadFromTextVentas("ventas.txt", listaVentas);
 
+	controller_addEmployee(listaCliente); 					  //FUNCIONA  1
+	//controller_vender_afiches(listaVentas,listaCliente); 		  //FUNCIONA  2
+	//controller_modificar_Venta(listaVentas,listaCliente);       //FUNCIONA  3
+	//controller_cobrar_venta(listaVentas, listaCliente); 		  //FUNCIONA  4
+	//controller_generarInforme(listaVentas, listaCliente);       //FUNCIONA  5
+	//controller_generarInformeDeudas(listaVentas, listaCliente); //FUNCIONA  6
+	//controller_calcularAlQueSeLeVendioMas(listaVentas, listaCliente); //FUNCIONA 7A
+	filterCliente(listaVentas, listaCliente);
 
-	//controller_addEmployee(listaCliente);
 	//controller_printAfiche(listaVentas);
 	//controller_printCliente(listaCliente);
 
-	controller_vender_afiches(listaVentas,listaCliente);
-	//controller_printAfiche(listaVentas);
-	controller_modificar_Venta(listaVentas,listaCliente);
-
-
-
-	//controller_calcularTotalDeSueldoConMap(listaEmpleados); //funciona
-	//controller_ListEmployee(listaEmpleados);
-	//controller_removeEmployeeBySalary(listaEmpleados); F U N C I O N A
-	//controller_ListEmployee(listaEmpleados);
-
-
-	//------Test
-	/*
-
-	id,nombre,horasTrabajadas,sueldo
-	1,A,120,100
-	2,B,180,100
-	3,C,325,100
-	4,D,120,100
-	5,E,220,100
 
 
 
 
-
-
-
-
+/*
     printf("\nBienvenido al sistema de gestión de empleados.\n");
     do{
     	utn_getMenu(&option, ATTEMPTS, 1, 10);

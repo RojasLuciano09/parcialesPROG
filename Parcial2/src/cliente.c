@@ -173,7 +173,7 @@ int Cliente_set_cuit(Cliente* this,char* cuit)
 {
 
 	int output=-1;
-	if(this!=NULL )//&& isCuit(cuit)==1 && cuit!=NULL)
+	if(this!=NULL && isCuit(cuit)==1 && cuit!=NULL)
 	{
 
 		strncpy(this->cuit,cuit,LONG_NAME);
@@ -218,6 +218,34 @@ int Cliente_print(void* itemOne)
 	}
 	return output;
 }
+
+int Cliente_printById(void* itemOne,void* arg)
+{
+	int output=-1;
+	Cliente* buffer;
+	buffer =(Cliente*)itemOne;
+	char idAux[SIZE];
+	char nombreAux[SIZE];
+	char apellidoAux[SIZE];
+	char cuitAux[SIZE];
+
+
+	if(buffer!=NULL)
+	{
+		if( Cliente_getIdStr(buffer, idAux)==0			 	 &&
+			strncmp(idAux,arg,SIZE)==0						 &&
+			Cliente_get_nombre(buffer, nombreAux)==0		 &&
+			Cliente_get_apellido(buffer, apellidoAux)==0   	 &&
+			Cliente_get_cuit(buffer, cuitAux)==0			 )
+		{
+
+			printf("%-6s %-11s %-15s %-17s\n", idAux, nombreAux, apellidoAux, cuitAux);
+			output = 0;
+		}
+	}
+	return output;
+}
+
 
 int Cliente_sort(void* itemOne,void* itemTwo)
 {
@@ -285,6 +313,28 @@ int Cliente_sortID(void* itemOne,void* itemTwo)
 	return output;
 }
 
+/**
+ * comparo los ids
+ */
+int comparoIDCliente(void* itemOne,void* itemTwo)
+{
+	int out=-1;
+	Cliente* this;
+	this =(Cliente*)itemOne;
+	char id_obtenido[SIZE];
+
+
+	if( Cliente_getIdStr(this,id_obtenido )==0  &&
+	    strncmp(id_obtenido,itemTwo,SIZE)==0  	 )
+	{
+
+		out =0;
+	}
+	printf("\n %s  ########### %s \n",id_obtenido,itemTwo);
+	return out;
+}
+
+
 int veoSiEstanRepetidos(void* itemOne,void* cuit)
 {
 
@@ -300,6 +350,7 @@ int veoSiEstanRepetidos(void* itemOne,void* cuit)
 			output =-1;
 		}
 	}
+
 	return output;
 }
 

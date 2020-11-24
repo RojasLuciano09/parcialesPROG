@@ -39,6 +39,8 @@ Cliente* Cliente_new();
 
 int veoSiEstanRepetidos(void* itemOne,void* cuit);
 int veoSiExisteEsteID(void* itemOne,void* id);
+int Cliente_printById(void* itemOne,void* arg);
+int comparoIDCliente(void* itemOne,void* itemTwo);
 
 
 #endif /* CLIENTE_H_ */

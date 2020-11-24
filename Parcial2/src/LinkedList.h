@@ -58,12 +58,15 @@ int ll_map(LinkedList* this, int (pFunc)(void*));
 int ll_filterWithMap(LinkedList* this, int (*pFunc)(void*));
 int ll_filterBorrarBajoUnaCondicion(LinkedList* this, int (*pFunc)(void*));
 int ll_reduce(LinkedList* this, int (*pFunc)(void*),int* pResultado);
-
-LinkedList* ll_filterBySomethingCloneAndReturn(LinkedList* this, int (*pFunc)(void*));
-
+float ll_reduceFloat(LinkedList* this, float (*pFunc)(void*));
+LinkedList* ll_filterBySomethingCloneAndReturn(LinkedList* this, int (*pFunc)(void*,void*),void* arg);
 int ll_map2(LinkedList* this, int (*pFunc)(void*,void*),void* arg);
 
+int ll_map3(LinkedList* this, int (*pFunc)(void*,void*),void* arg,int* index);
 
+int ll_reduce2(LinkedList* this, int (*pFunc)(void*,void*),void* arg,int* pResultado);
+
+int ll_search(LinkedList* this,int(*pFunc)(void*,void*), void* arg);
 
 
 

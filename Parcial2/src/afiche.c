@@ -126,15 +126,6 @@ int Afiche_get_id_clienteSTR(Afiche* this,char* id_cliente)
 	return output;
 }
 
-
-
-
-
-
-
-
-
-
 int Afiche_set_cantidad_afichesSTR(Afiche* this, char* cantidad_afiches)
 {
 	int output=-1;
@@ -162,7 +153,7 @@ int Afiche_get_cantidad_afichesSTR(Afiche* this,char* cantidad_afiches)
 int Afiche_set_nombre_archivo(Afiche* this,char* nombre_archivo)
 {
 	int output=-1;
-	if(this!=NULL && esUnArchivo(nombre_archivo)==1)//isString(nombre_archivo)==1 && nombre_archivo!=NULL)
+	if(this!=NULL && esUnArchivo(nombre_archivo)==1)
 	{
 		strncpy(this->nombre_archivo,nombre_archivo,LONG_NAME);
 		output=0;
@@ -312,7 +303,7 @@ int Afiche_print(void* itemOne)
 }
 
 
-int afichesCobrados(void* itemOne)
+int afichesCobrados(void* itemOne,void* arg)
 {
 	int out=-1;
 	Afiche* this;
@@ -320,13 +311,16 @@ int afichesCobrados(void* itemOne)
 	char esta_cobrado[SIZE];
 
 	if(Afiche_get_a_cobrarSTR(this, esta_cobrado)==0 &&
-	   strncmp(esta_cobrado,"1",SIZE)==0)
+	   strncmp(esta_cobrado,arg,SIZE)==0)
 	{
 		out =0;
 	}
 	return out;
 }
 
+/**
+ * me devuelve por puntero el id_cliente de un afiche
+ */
 int devuelvoElementoPorID(void* itemOne,void* itemTwo,char* id_cliente)
 {
 	int out=-1;
@@ -348,9 +342,42 @@ int devuelvoElementoPorID(void* itemOne,void* itemTwo,char* id_cliente)
 	return out;
 }
 
+/**
+ * comparo los ids
+ */
+int comparoID(void* itemOne,void* itemTwo)
+{
+	int out=-1;
+	Afiche* this;
+	this =(Afiche*)itemOne;
+	char id_obtenido[SIZE];
 
 
+	if( Afiche_getIdStr(this,id_obtenido )==0  &&
+	    strncmp(id_obtenido,itemTwo,SIZE)==0  	 )
+	{
 
+		out =0;
+	}
+	return out;
+}
+
+
+int comparoID_cliente(void* itemOne,void* itemTwo)
+{
+	int out=0;
+	Afiche* this;
+	this =(Afiche*)itemOne;
+	char id_obtenido[SIZE];
+
+
+	if( Afiche_get_id_clienteSTR(this,id_obtenido )==0  &&
+	    strncmp(id_obtenido,itemTwo,SIZE)==0  	 		)
+	{
+		out =1;
+	}
+	return out;
+}
 
 
 
