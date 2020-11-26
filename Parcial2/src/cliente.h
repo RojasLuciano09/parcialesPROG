@@ -7,7 +7,6 @@
 
 #ifndef CLIENTE_H_
 #define CLIENTE_H_
-
 #define LONG_NAME 128
 #define SIZE 4096
 
@@ -37,10 +36,10 @@ Cliente* Cliente_newParametros(char* id,char* nombre,char* apellido, char* cuit)
 void Cliente_delete(Cliente* this);
 Cliente* Cliente_new();
 
-int veoSiEstanRepetidos(void* itemOne,void* cuit);
+int thisCuitExists(void* itemOne,void* cuit);
 int veoSiExisteEsteID(void* itemOne,void* id);
 int Cliente_printById(void* itemOne,void* arg);
 int comparoIDCliente(void* itemOne,void* itemTwo);
-
+int Cliente_printCUIT(void* itemOne);
 
 #endif /* CLIENTE_H_ */

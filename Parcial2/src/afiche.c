@@ -5,14 +5,12 @@
  *      Author: l.rojas
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <limits.h>
-#include <ctype.h>
-#include "Afiche.h"
 #include "utn.h"
+#include "afiche.h"
+
 
 Afiche* Afiche_new()
 {
@@ -149,6 +147,18 @@ int Afiche_get_cantidad_afichesSTR(Afiche* this,char* cantidad_afiches)
 	}
 	return output;
 }
+
+int Afiche_get_cantidad_afichesINT(Afiche* this,int* cantidad_afiches)
+{
+	int output=-1;
+	if(this!=NULL && cantidad_afiches!=NULL)
+	{
+		*cantidad_afiches = this->cantidad_afiches;
+		output=0;
+	}
+	return output;
+}
+
 
 int Afiche_set_nombre_archivo(Afiche* this,char* nombre_archivo)
 {
@@ -371,11 +381,50 @@ int comparoID_cliente(void* itemOne,void* itemTwo)
 	char id_obtenido[SIZE];
 
 
+
 	if( Afiche_get_id_clienteSTR(this,id_obtenido )==0  &&
 	    strncmp(id_obtenido,itemTwo,SIZE)==0  	 		)
 	{
 		out =1;
 	}
+	return out;
+}
+
+int comparoID_cliente2(void* itemOne,void* itemTwo)
+{
+	int out=-1;
+	Afiche* this;
+	this =(Afiche*)itemOne;
+	char id_obtenido[SIZE];
+
+	if( Afiche_get_id_clienteSTR(this,id_obtenido )==0  &&
+	    strncmp(id_obtenido,itemTwo,SIZE)==0  	 		)
+	{
+		out =0;
+	}
+	return out;
+}
+
+int comparoAfichesVendidos(void* itemOne,void* itemTwo)
+{
+	int out=-1;
+	Afiche* this;
+	this =(Afiche*)itemOne;
+	int cantidadAux;
+	int temp;
+	temp = *(int *)itemTwo;
+
+	Afiche_get_cantidad_afichesINT(this, &cantidadAux);
+
+//	printf("\n cantidadAux -> %d ||| temp %d   \n", cantidadAux,temp);
+
+	if(cantidadAux <  temp)
+	{
+
+
+		out =0;
+	}
+
 	return out;
 }
 
@@ -386,18 +435,18 @@ int convertZona(char* in, char* out)
 {
 	int output=-1;
 
-	if(strncmp(in,"0",4096)==0)
+	if(strncmp(in,"0",SIZE)==0)
 	{
-		strncpy(out,"CABA",5);
+		strncpy(out,"CABA",SIZE);
 		output = 0;
 	}
-	else if(strncmp(in,"1",4096)==0)
+	else if(strncmp(in,"1",SIZE)==0)
 	{
-		strncpy(out,"ZONA_SUR",10);
+		strncpy(out,"ZONA_SUR",SIZE);
 		output = 0;
 	}else
 	{
-		strncpy(out,"ZONA_OESTE",15);
+		strncpy(out,"ZONA_OESTE",SIZE);
 		output = 0;
 	}
 	return output;
@@ -407,14 +456,14 @@ int convertACobrar(char* in, char* out)
 {
 	int output=-1;
 
-	if(strncmp(in,"0",10)==0)
+	if(strncmp(in,"0",SIZE)==0)
 	{
-		strncpy(out,"NO",5);
+		strncpy(out,"NO",SIZE);
 		output = 0;
 	}
-	else if(strncmp(in,"1",5)==0)
+	else if(strncmp(in,"1",SIZE)==0)
 	{
-		strncpy(out,"SI",10);
+		strncpy(out,"SI",SIZE);
 		output = 0;
 	}
 	return output;

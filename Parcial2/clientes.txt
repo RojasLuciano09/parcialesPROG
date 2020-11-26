@@ -1,10 +1,10 @@
-id,nombre,apellido,cuit
+ID,NOMBRE,APELLIDO,CUIT
 1,Alberto,Nisman,23-37933040-0
-2,elba,zurita,23-37933041-0
-3,aquiles,bailo,23-37933042-0
-4,elsa,capunta,23-37933043-0
-5,zoila,cerda,23-37933044-0
-6,marcia,ana,23-37933045-0
+2,Elba,Zurita,23-37933041-0
+3,Aquiles,Bailo,23-37933042-0
+4,Elsa,Capunta,23-37933043-0
+5,Zoila,Cerda,23-37933044-0
+6,Marcia,Ana,23-37933045-0
 7,Kimberlee,Ernesta,23-37933046-0
 8,Henrieta,Iver,23-37933047-0
 9,Jeanine,Megen,23-37933048-0
@@ -19,3 +19,5 @@ id,nombre,apellido,cuit
 18,Cristi,Cristie,23-37933040-8
 19,Solomon,Nananne,23-37933040-9
 20,Sacha,Morse,23-37933042-0
+20,Luchito,Rojas,23-37931111-1
+22,Luchito,Rojas,21-37931111-1

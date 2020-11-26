@@ -68,5 +68,5 @@ int ll_reduce2(LinkedList* this, int (*pFunc)(void*,void*),void* arg,int* pResul
 
 int ll_search(LinkedList* this,int(*pFunc)(void*,void*), void* arg);
 
-
+void* ll_map4(LinkedList* this, int (*pFunc)(void*,void*),void* arg);
 

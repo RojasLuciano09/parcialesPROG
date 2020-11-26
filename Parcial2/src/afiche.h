@@ -8,8 +8,9 @@
 #ifndef AFICHE_H_
 #define AFICHE_H_
 
-#define SIZE 4096
+
 #define LONG_NAME 128
+
 
 
 typedef struct
@@ -46,12 +47,12 @@ void Afiche_delete(Afiche* this);
 Afiche* Afiche_new();
 int convertZona(char* in, char* out);
 int convertACobrar(char* in, char* out);
-
+int comparoID_cliente2(void* itemOne,void* itemTwo);
 int afichesCobrados(void* itemOne,void* arg);
 int devuelvoElementoPorID(void* itemOne,void* itemTwo,char* id_cliente);
 int comparoID(void* itemOne,void* itemTwo);
 int comparoID_cliente(void* itemOne,void* itemTwo);
-
-
+int Afiche_get_cantidad_afichesINT(Afiche* this,int* cantidad_afiches);
+int comparoAfichesVendidos(void* itemOne,void* itemTwo);
 
 #endif /* AFICHE_H_ */

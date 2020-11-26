@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "LinkedList.h"
 #include "Controller.h"
-#include "Cliente.h"
+#include "cliente.h"
+#include "afiche.h"
+#include "parser.h"
 #include "utn.h"
 
 /****************************************************
@@ -23,113 +26,68 @@ int main(void)
 {
 	setbuf(stdout, NULL);
 	LinkedList* listaCliente = ll_newLinkedList();
-
 	LinkedList* listaVentas = ll_newLinkedList();
+	int opcion;
+	int subOpcion;
 
-	//------Test
-	controller_loadFromText("clientes.txt",listaCliente);
-	controller_loadFromTextVentas("ventas.txt", listaVentas);
+	controller_loadOrSave("r", parser_ClienteFromText, "clientes.txt", listaCliente);
+	controller_loadOrSave("r", parser_VentasFromText, "ventas.txt", listaVentas);
 
-	controller_addEmployee(listaCliente); 					  //FUNCIONA  1
-	//controller_vender_afiches(listaVentas,listaCliente); 		  //FUNCIONA  2
-	//controller_modificar_Venta(listaVentas,listaCliente);       //FUNCIONA  3
-	//controller_cobrar_venta(listaVentas, listaCliente); 		  //FUNCIONA  4
-	//controller_generarInforme(listaVentas, listaCliente);       //FUNCIONA  5
-	//controller_generarInformeDeudas(listaVentas, listaCliente); //FUNCIONA  6
-	//controller_calcularAlQueSeLeVendioMas(listaVentas, listaCliente); //FUNCIONA 7A
-	filterCliente(listaVentas, listaCliente);
+	do
+	{
+		if(utn_getMenu(menu, &opcion, 3,1,8)==0)
+		{
+			switch(opcion)
+			{
+			case 1:
+				controller_addEmployee(listaCliente);
+				break;
 
-	//controller_printAfiche(listaVentas);
-	//controller_printCliente(listaCliente);
+			case 2:
+				controller_vender_afiches(listaVentas,listaCliente);
+				break;
 
+			case 3:
+				controller_modificar_Venta(listaVentas,listaCliente,COBRADOS);
+				break;
 
+			case 4:
+				controller_cobrar_venta(listaVentas, listaCliente);
+				break;
 
+			case 5:
+				controller_generarInforme(listaVentas, listaCliente, COBRADOS_TXT, COBRADOS,firstRow_COBRADAS);
+				break;
 
+			case 6:
+				controller_generarInforme(listaVentas, listaCliente, A_COBRAR_TXT, NO_COBRADOS, firstRow_A_COBRAR);
+				break;
 
-/*
-    printf("\nBienvenido al sistema de gestión de empleados.\n");
-    do{
-    	utn_getMenu(&option, ATTEMPTS, 1, 10);
+			case 7:
+				if(utn_getMenu(menu, &subOpcion, 3,1,3)==0)
+				{
+					switch(subOpcion)
+					{
+					case 1:
+						controller_generarEstadisticas(listaVentas, listaCliente,CLIENTE_AL_QUE_VENDIO_MAS_AFICHES);
+						break;
 
-        switch(option)
-        {
-            case 1:
+					case 2:
+						controller_generarEstadisticas(listaVentas, listaCliente,CLIENTE_AL_QUE_VENDIO_MENOS_AFICHES);
+						break;
 
-                if(loadFlag==0 && controller_loadFromText("data.csv",listaEmpleados)==0)
-                {
-                	printf("\nDatos cargados.\n");
-                	loadFlag=1;
-                }
-                else
-                {
-                	if(utn_getInt("\nLa lista ya existe, sobrescribir?: \n1-Si\n2-No \n>",ERROR,&optionFlag,ATTEMPTS,1,2)==0 &&
-                		optionFlag==1 && controller_loadFromText("data.csv",listaEmpleados)==0	)
-                	{
-                		printf("\nDatos cargados.\n");
-                	}
-                	else
-                	{
-                		printf("\nNo hay datos cargados.\n");
-                	}
-                }
-                break;
+					case 3:
+						controller_ventaConMasAfichesVendidos(listaVentas, listaCliente);
+						break;
+					}
+				}
 
-            case 2:
-
-                if(loadFlag==0 && !controller_loadFromBinary("dataBinario.bin",listaEmpleados))
-                {
-                	printf("\nDatos cargados.\n");
-                	loadFlag=1;
-                }
-                else
-                {
-                	if(utn_getInt("\nLa lista ya existe, sobrescribir?: \n1-Si\n2-No \n>",ERROR,&optionFlag,ATTEMPTS,1,2)==0 &&
-                		optionFlag==1 && controller_loadFromBinary("dataBinario.bin",listaEmpleados)==0	)
-                	{
-                		printf("\nDatos cargados.\n");
-                	}
-                	else
-                	{
-                		printf("\nNo hay datos cargados.\n");
-                	}
-                }
-                break;
-
-            case 3:
-
-                break;
-
-            case 4:
-            	controller_editEmployee(listaEmpleados);
-                break;
-
-            case 5:
-            	controller_removeEmployee(listaEmpleados);
-                break;
-
-            case 6:
-            	controller_ListEmployee(listaEmpleados);
-                break;
-
-            case 7:
-            	controller_sortEmployee(listaEmpleados);
-                break;
-
-            case 8:
-            	controller_saveAsText("data.csv",listaEmpleados);
-                break;
-
-            case 9:
-            	controller_saveAsBinary("dataBinario.bin",listaEmpleados);
-                break;
-
-
-        }
-    }while(option != 10);
-    ll_deleteLinkedList(listaEmpleados);
+			}
+		}
+	}while(opcion!=8);
+	controller_loadOrSave("w", parser_SaveClientToText, "clientes.txt", listaCliente);
+	controller_loadOrSave("w", parser_SaveVentaToText, "ventas.txt", listaVentas);
     printf("\nExit");
-
-    */
     return 0;
 }
 

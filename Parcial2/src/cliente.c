@@ -11,10 +11,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <limits.h>
 #include <ctype.h>
-#include "utn.h"
 #include "cliente.h"
+#include "utn.h"
+
 
 static int UpperFirstChar(char *string);
 
@@ -63,15 +63,22 @@ Cliente* Cliente_newParametros(char* id,char* nombre,char* apellido, char* cuit)
 	Cliente* this = Cliente_new();
 	if(this!=NULL)
 	{
-
 		if(Cliente_setIdStr(this, id)==0 			&&
 		   Cliente_set_nombre(this, nombre)==0  	&&
 		   Cliente_set_apellido(this, apellido)==0  &&
 		   Cliente_set_cuit(this, cuit)==0			)
 		{
 			return this;
+		}else
+		{
+		//	printf("\n UN ERROR TOMANDO LOS DATOS LLEGO | %s | %s | %s | %s \n",id,nombre,apellido,cuit);
 		}
+
+	}else
+	{
+	//	printf("\n LLEGO ALGO NULL LACONCHADETUHERMANA  \n");
 	}
+
 	Cliente_delete(this);
 	return NULL;
 }
@@ -313,6 +320,30 @@ int Cliente_sortID(void* itemOne,void* itemTwo)
 	return output;
 }
 
+int Cliente_printCUIT(void* itemOne)
+{
+	int output=-1;
+	Cliente* buffer;
+	buffer =(Cliente*)itemOne;
+	char cuitAux[SIZE];
+	if(buffer!=NULL)
+	{
+		if(Cliente_get_cuit(buffer, cuitAux)==0	)
+		{
+			printf("%-6s",cuitAux);
+			output = 0;
+		}
+	}
+	return output;
+}
+
+
+
+
+
+
+
+
 /**
  * comparo los ids
  */
@@ -325,19 +356,16 @@ int comparoIDCliente(void* itemOne,void* itemTwo)
 
 
 	if( Cliente_getIdStr(this,id_obtenido )==0  &&
-	    strncmp(id_obtenido,itemTwo,SIZE)==0  	 )
+	    strncmp(id_obtenido,itemTwo,SIZE)==0 )
 	{
-
 		out =0;
 	}
-	printf("\n %s  ########### %s \n",id_obtenido,itemTwo);
 	return out;
 }
 
 
-int veoSiEstanRepetidos(void* itemOne,void* cuit)
+int thisCuitExists(void* itemOne,void* cuit)
 {
-
 	int output=0;
 	Cliente* buffer1;
 	buffer1	 = itemOne;

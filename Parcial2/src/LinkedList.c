@@ -1,10 +1,7 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "LinkedList.h"
-#include "Cliente.h"
-#include "Afiche.h"
 
 
 
@@ -32,7 +29,7 @@ LinkedList* ll_newLinkedList(void)
     return this;
 }
 
-/** \brief Retorna la cantidad de elementos de la lista
+/** \brief Retorna la cantidad de elementos de la lista,
  *
  * \param this LinkedList* Puntero a la lista
  * \return int Retorna (-1) si el puntero es NULL o la cantidad de elementos de la lista
@@ -41,11 +38,9 @@ LinkedList* ll_newLinkedList(void)
 int ll_len(LinkedList* this)
 {
     int size = -1;
-
     if(this!=NULL)
     {
         size=this->size;
-
     }
     return size;
 }
@@ -158,12 +153,10 @@ int test_addNode(LinkedList* this, int nodeIndex,void* pElement)
 int ll_add(LinkedList* this, void* pElement)
 {
     int retorno = -1;
-    int index=ll_len(this);
-
-    if(this!=NULL)
+    int len=ll_len(this);
+    if(this!=NULL && len>-1)
     {
-        addNode(this,index,pElement);       //añado a la lista
-
+        addNode(this,len,pElement);       //añado a la lista
         retorno=0;
     }
     return retorno;
@@ -655,6 +648,7 @@ LinkedList* ll_filterBySomethingCloneAndReturn(LinkedList* this, int (*pFunc)(vo
 				pElement = ll_get(this, i);
 				if(pElement!=NULL && pFunc(pElement,arg)==0)
 				{
+
 					ll_add(auxList, pElement);
 				}
 			}
@@ -663,10 +657,6 @@ LinkedList* ll_filterBySomethingCloneAndReturn(LinkedList* this, int (*pFunc)(vo
 	return auxList;
 }
 
-
-/**
- *  devuelve el indice del element que cumpla con la funcion criterio
- */
 int ll_search(LinkedList* this,int(*pFunc)(void*,void*), void* arg)
 {
 	int out=-1;
@@ -698,19 +688,13 @@ int ll_reduce2(LinkedList* this, int (*pFunc)(void*,void*),void* arg,int* pResul
 			element = ll_get(this, i);
 			if(element!=NULL)
 			{
-				acumulador += pFunc(element,arg);
+				acumulador = acumulador +  pFunc(element,arg);
 			}
 		}
 		*pResultado = acumulador;
 	}
 	return output;
 }
-
-
-
-
-
-
 
 int ll_map2(LinkedList* this, int (*pFunc)(void*,void*),void* arg)
 {
@@ -732,24 +716,3 @@ int ll_map2(LinkedList* this, int (*pFunc)(void*,void*),void* arg)
 	return output;
 }
 
-int ll_map3(LinkedList* this, int (*pFunc)(void*,void*),void* arg,int* index)
-{
-	int output=-1;
-	int len = ll_len(this);
-	void* pElement;
-	if(this!=NULL && pFunc != NULL)
-	{
-		for(int i = 0; i < len ; i++)
-		{
-			pElement = ll_get(this, i);
-			if(pFunc(pElement,arg)==0)
-			{
-
-				output = 0;
-				*index = i;
-				break;
-			}
-		}
-	}
-	return output;
-}

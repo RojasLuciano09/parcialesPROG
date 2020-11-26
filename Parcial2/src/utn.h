@@ -8,6 +8,8 @@
 #define SIZE 4096
 #define ERROR "\nError!, ingrese una opcion valida..\n"
 #define ATTEMPTS 3
+#include <limits.h>
+
 
 int utn_getIntStr(char msg[], char msgError[], char pResult[], int attemps, int limit);
 int utn_getString(char msg[], char msgError[], char pResult[], int attemps, int limit);
