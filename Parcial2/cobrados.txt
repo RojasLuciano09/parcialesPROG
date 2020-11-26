@@ -1,0 +1,4 @@
+id,nombre,apellido,cuit,ventas_cobradas
+13,Loy,Gabbey,23-37933040-3,1
+16,Paulita,Sayre,23-37933040-6,2
+19,Solomon,Nananne,23-37933040-9,4

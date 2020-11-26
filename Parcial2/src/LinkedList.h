@@ -55,18 +55,11 @@ LinkedList* ll_clone(LinkedList* this);
 int ll_sort(LinkedList* this, int (*pFunc)(void* ,void*), int order);
 //---------- new's
 int ll_map(LinkedList* this, int (pFunc)(void*));
-int ll_filterWithMap(LinkedList* this, int (*pFunc)(void*));
-int ll_filterBorrarBajoUnaCondicion(LinkedList* this, int (*pFunc)(void*));
-int ll_reduce(LinkedList* this, int (*pFunc)(void*),int* pResultado);
+int ll_reduceInt(LinkedList* this, int (*pFunc)(void*),int* pResultado);
 float ll_reduceFloat(LinkedList* this, float (*pFunc)(void*));
 LinkedList* ll_filterBySomethingCloneAndReturn(LinkedList* this, int (*pFunc)(void*,void*),void* arg);
 int ll_map2(LinkedList* this, int (*pFunc)(void*,void*),void* arg);
-
-int ll_map3(LinkedList* this, int (*pFunc)(void*,void*),void* arg,int* index);
-
 int ll_reduce2(LinkedList* this, int (*pFunc)(void*,void*),void* arg,int* pResultado);
-
 int ll_search(LinkedList* this,int(*pFunc)(void*,void*), void* arg);
 
-void* ll_map4(LinkedList* this, int (*pFunc)(void*,void*),void* arg);
 

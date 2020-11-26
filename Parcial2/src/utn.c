@@ -1,3 +1,6 @@
+/*
+ *      Author: l.rojas
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,7 +16,30 @@ static int esLetrasYEspacios(char* cadena, int len);
 static int getLetrasYEspacios(char *pResultado, int len);
 
 
-
+/*
+ * \brief valida que la cadena recibida es un número entero.
+ * \param puntero con el string validado.
+ * \param longitud del string.
+ * \return 1 (verdadero) si es un número entero. 0 (falso) si no lo es.
+ */
+int esNumericaInt(char* cadena, int len)
+{
+	int retorno=1;
+	int i;
+	for(i=0; i<len && cadena[i]!='\0'; i++)
+	{
+		if(i==0 && (cadena[i]=='+' || cadena[i]=='-'))
+		{
+			continue;
+		}
+		if(cadena[i]>'9' || cadena[i]<'0')
+		{
+			retorno=0;
+				break;
+		}
+	}
+	return retorno;
+}
 
 int esUnArchivo(char* cadena)
 {

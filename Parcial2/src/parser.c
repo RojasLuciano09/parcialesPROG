@@ -1,4 +1,6 @@
-
+/*
+ *      Author: l.rojas
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include "parser.h"
@@ -9,11 +11,11 @@
 #include "utn.h"
 
 
-/** \brief Parse the employee data from the data.csv file (text mode).
- *
- * \param pFile FILE* :  File from which the data will be obtained.
- * \param list LinkedList* : List in which the obtained data will be stored
- * \return int output : (-1) If there was an error (0) if the process was successful.
+/** \brief Parsea los datos de un cliente desde un archivo  (text mode).
+ * \param pFile FILE* :  Archivo de donde se obtendra la informacion.
+ * \param list LinkedList* list: Lista en la cual los datos seran guardados.
+ * \return int output  (-1) Error.
+                       ( 0) todo ok.
  */
 int parser_ClienteFromText(FILE* pFile , LinkedList* list)
 {
@@ -29,7 +31,7 @@ int parser_ClienteFromText(FILE* pFile , LinkedList* list)
 		do
 		{
 
-			if(fscanf(pFile, "%[^,],%[^,],%[^,],%[^\n]\n",idAux, nombreAux, apellidoAux, cuitAux)==4)
+			if(fscanf(pFile, "%[^,],%[^,],%[^,],%[^\n]\n",idAux, nombreAux, apellidoAux, cuitAux)==4 && isInt(idAux)==1)
 			{
 				bufferEmp = Cliente_newParametros(idAux, nombreAux, apellidoAux, cuitAux);
 				ll_add(list, bufferEmp);
@@ -46,6 +48,12 @@ int parser_ClienteFromText(FILE* pFile , LinkedList* list)
     return output;
 }
 
+/** \brief Parsea los datos de una venta desde un archivo  (text mode).
+ * \param pFile FILE* :  Archivo de donde se obtendra la informacion.
+ * \param list LinkedList* list: Lista en la cual los datos seran guardados.
+ * \return int output  (-1) Error.
+                       ( 0) todo ok.
+ */
 int parser_VentasFromText(FILE* pFile , LinkedList* list)
 {
 	int output=-1;
@@ -64,9 +72,12 @@ int parser_VentasFromText(FILE* pFile , LinkedList* list)
 		{
 			if(fscanf(pFile, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n",idAux, id_clienteAux, cantidad_afichesAux, nombre_archivoAux,zona_pegar_aficheAux,a_cobrarAux)==6)
 			{
-				buffer = Afiche_newParametros( idAux, id_clienteAux, cantidad_afichesAux, nombre_archivoAux,zona_pegar_aficheAux,a_cobrarAux);
-				ll_add(list, buffer);
-				output=0;
+
+					buffer = Afiche_newParametros( idAux, id_clienteAux, cantidad_afichesAux, nombre_archivoAux,zona_pegar_aficheAux,a_cobrarAux);
+					ll_add(list, buffer);
+					output=0;
+
+
 			}
 			else
 			{
@@ -77,6 +88,12 @@ int parser_VentasFromText(FILE* pFile , LinkedList* list)
     return output;
 }
 
+/** \brief Funcion para guardar los archivos en modo texto
+ * \param pFile FILE* :  Archivo de donde se guardaran la informacion.
+ * \param list LinkedList* list: Lista de la cual los datos seran obtenidos.
+ * \return int output  (-1) Error.
+                       ( 0) todo ok.
+ */
 int parser_SaveClientToText(FILE* pFile, LinkedList* listClient)
 {
 	int out=-1;
@@ -108,6 +125,12 @@ int parser_SaveClientToText(FILE* pFile, LinkedList* listClient)
 	return out;
 }
 
+/** \brief Funcion para guardar los archivos en modo texto
+ * \param pFile FILE* :  Archivo de donde se guardaran la informacion.
+ * \param list LinkedList* list: Lista de la cual los datos seran obtenidos.
+ * \return int output  (-1) Error.
+                       ( 0) todo ok.
+ */
 int parser_SaveVentaToText(FILE* pFile, LinkedList* listAfiche)
 {
 	int out=-1;

@@ -557,75 +557,6 @@ int ll_sort(LinkedList* this, int (*pFunc)(void* ,void*), int order)
     return returnAux;
 }
 
-/** \brief Ordena los elementos de la lista utilizando la funcion criterio recibida como parametro
- * \param pList LinkedList* Puntero a la lista
- * \param pFunc (*pFunc) Puntero a la funcion criterio
- * \param order int  [1] Indica orden ascendente - [0] Indica orden descendente
- * \return int Retorna  (-1) Error: si el puntero a la listas es NULL
-                        ( 0) Si ok
- */
-int ll_map(LinkedList* this, int (*pFunc)(void*))
-{
-	int output=-1;
-	int len = ll_len(this);
-	void* pElement;
-	if(this!=NULL && pFunc != NULL)
-	{
-		for(int i = 0; i < len ; i++)
-		{
-			pElement = ll_get(this, i);
-			pFunc(pElement);
-		}
-		output = 0 ;
-	}
-	return output;
-}
-
-
-/** \brief  ejecuta una función reductora en cada elemento de la lista, lo que da como resultado un valor de salida único.
- * \param pList LinkedList* Puntero a la lista
- * \param pFunc (*pFunc) Puntero a la funcion criterio
- * \return   NULL   = algo salio mal
-             Linkdlist*= OK.
- */
-int ll_reduce(LinkedList* this, int (*pFunc)(void*),int* pResultado)
-{
-	int output=-1;
-	int acumulador=0;
-	void* element;
-	if(this!=NULL && pFunc!=NULL)
-	{
-		for(int i = 0; i< ll_len(this);i++)
-		{
-			element = ll_get(this, i);
-			if(element!=NULL)
-			{
-				acumulador += pFunc(element);
-			}
-		}
-		*pResultado = acumulador;
-	}
-	return output;
-}
-
-float ll_reduceFloat(LinkedList* this, float (*pFunc)(void*))
-{
-	float returnAux =0;
-	int len = ll_len(this);
-	void* pElemento;
-	if(this!=NULL)
-	{
-		for (int i = 0;i<len;i++)
-		{
-			pElemento=ll_get(this, i);
-			returnAux= returnAux + pFunc(pElemento);
-		}
-	}
-	return returnAux;
-}
-
-
-
 /** \brief  crea una nueva lista con todos los elementos que pasan la prueba implementada por la función criterio.
  * \param pList LinkedList* Puntero a la lista
  * \param pFunc (*pFunc) Puntero a la funcion criterio
@@ -657,26 +588,13 @@ LinkedList* ll_filterBySomethingCloneAndReturn(LinkedList* this, int (*pFunc)(vo
 	return auxList;
 }
 
-int ll_search(LinkedList* this,int(*pFunc)(void*,void*), void* arg)
-{
-	int out=-1;
-	void* element;
-	if(this!=NULL)
-	{
-		for(int i=0;i<ll_len(this);i++)
-		{
-			element=ll_get(this, i);
-			if(pFunc(element,arg)==0)
-			{
-				out=i;
-				break;
-			}
-		}
-	}
-	return out;
-}
-
-int ll_reduce2(LinkedList* this, int (*pFunc)(void*,void*),void* arg,int* pResultado)
+/** \brief  ejecuta una función reductora en cada elemento de la lista, lo que da como resultado un valor de salida único.
+ * \param pList LinkedList* Puntero a la lista
+ * \param pFunc (*pFunc) Puntero a la funcion criterio
+ * \return   NULL   = algo salio mal
+             Linkdlist*= OK.
+ */
+int ll_reduceInt(LinkedList* this, int (*pFunc)(void*),int* pResultado)
 {
 	int output=-1;
 	int acumulador=0;
@@ -688,7 +606,7 @@ int ll_reduce2(LinkedList* this, int (*pFunc)(void*,void*),void* arg,int* pResul
 			element = ll_get(this, i);
 			if(element!=NULL)
 			{
-				acumulador = acumulador +  pFunc(element,arg);
+				acumulador += pFunc(element);
 			}
 		}
 		*pResultado = acumulador;
@@ -696,6 +614,53 @@ int ll_reduce2(LinkedList* this, int (*pFunc)(void*,void*),void* arg,int* pResul
 	return output;
 }
 
+/** \brief  ejecuta una función reductora en cada elemento de la lista, lo que da como resultado un valor de salida único.
+ * \param pList LinkedList* Puntero a la lista
+ * \param pFunc (*pFunc) Puntero a la funcion criterio
+ * \return   NULL   = algo salio mal
+             Linkdlist*= OK.
+ */
+float ll_reduceFloat(LinkedList* this, float (*pFunc)(void*))
+{
+	float returnAux =0;
+	int len = ll_len(this);
+	void* pElemento;
+	if(this!=NULL)
+	{
+		for (int i = 0;i<len;i++)
+		{
+			pElemento=ll_get(this, i);
+			returnAux= returnAux + pFunc(pElemento);
+		}
+	}
+	return returnAux;
+}
+
+
+int ll_map(LinkedList* this, int (*pFunc)(void*))
+{
+	int output=-1;
+	int len = ll_len(this);
+	void* pElement;
+	if(this!=NULL && pFunc != NULL)
+	{
+		for(int i = 0; i < len ; i++)
+		{
+			pElement = ll_get(this, i);
+			pFunc(pElement);
+		}
+		output = 0 ;
+	}
+	return output;
+}
+
+/** \brief Recorre la lista y retorna 0 cuando se cumpla la funcion criterio
+ * \param pList LinkedList* Puntero a la lista
+ * \param pFunc (*pFunc) Puntero a la funcion criterio
+ *  \param void* arg:  Valor a comparar.
+ * \return int output  (-1) Error:
+                       ( 0) todo ok.
+ */
 int ll_map2(LinkedList* this, int (*pFunc)(void*,void*),void* arg)
 {
 	int output=-1;
@@ -716,3 +681,54 @@ int ll_map2(LinkedList* this, int (*pFunc)(void*,void*),void* arg)
 	return output;
 }
 
+/** \brief Devuelve el indice del elemento que cumple la funcion criterio
+ * \param pList LinkedList* Puntero a la lista
+ * \param pFunc (*pFunc) Puntero a la funcion criterio
+ *  \param void* arg:  Valor a comparar.
+ * \return int output  (-1) Error:
+                       ( 0) todo ok.
+ */
+int ll_search(LinkedList* this,int(*pFunc)(void*,void*), void* arg)
+{
+	int out=-1;
+	void* element;
+	if(this!=NULL)
+	{
+		for(int i=0;i<ll_len(this);i++)
+		{
+			element=ll_get(this, i);
+			if(pFunc(element,arg)==0)
+			{
+				out=i;
+				break;
+			}
+		}
+	}
+	return out;
+}
+
+/** \brief  ejecuta una función acumuladora de cada elemento de la lista, lo que da como resultado un valor de salida único.
+ * \param pList LinkedList* Puntero a la lista
+ * \param pFunc (*pFunc) Puntero a la funcion criterio
+ * \return int output  (-1) Error:
+                       ( 0) todo ok.
+ */
+int ll_reduce2(LinkedList* this, int (*pFunc)(void*,void*),void* arg,int* pResultado)
+{
+	int output=-1;
+	int acumulador=0;
+	void* element;
+	if(this!=NULL && pFunc!=NULL)
+	{
+		for(int i = 0; i< ll_len(this);i++)
+		{
+			element = ll_get(this, i);
+			if(element!=NULL)
+			{
+				acumulador = acumulador +  pFunc(element,arg);
+			}
+		}
+		*pResultado = acumulador;
+	}
+	return output;
+}

@@ -19,5 +19,3 @@ ID,NOMBRE,APELLIDO,CUIT
 18,Cristi,Cristie,23-37933040-8
 19,Solomon,Nananne,23-37933040-9
 20,Sacha,Morse,23-37933042-0
-20,Luchito,Rojas,23-37931111-1
-22,Luchito,Rojas,21-37931111-1

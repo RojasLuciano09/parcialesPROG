@@ -1,10 +1,6 @@
 /*
- * parser.h
- *
- *  Created on: 1 nov. 2020
  *      Author: l.rojas
  */
-
 #include "LinkedList.h"
 #ifndef PARSER_H_
 #define PARSER_H_

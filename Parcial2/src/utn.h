@@ -1,6 +1,5 @@
 /*
- * utn.h
- * Author: Nicolas Luciano Rojas
+ *      Author: l.rojas
  */
 
 #ifndef UTN_H_
@@ -28,6 +27,6 @@ int isInt(char string[]);
 int isString(char string[]);
 int isCuit(char string[]);
 int esUnArchivo(char* cadena);
-
+int esNumericaInt(char* cadena, int len);
 
 #endif /* UTN_H_ */

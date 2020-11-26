@@ -1,0 +1,8 @@
+id,nombre,apellido,cuit,a_cobrar
+2,Elba,Zurita,23-37933041-0,2
+10,Aggie,Bronnie,23-37933049-0,1
+11,Brandea,Shel,23-37933040-1,1
+14,Star,Dominica,23-37933040-4,1
+15,Blanch,Cristobal,23-37933040-5,1
+17,Shaughn,Katrine,23-37933040-7,1
+18,Cristi,Cristie,23-37933040-8,1

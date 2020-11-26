@@ -1,3 +1,6 @@
+/*
+ *      Author: l.rojas
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,20 +9,19 @@
 #include "cliente.h"
 #include "afiche.h"
 #include "parser.h"
+#include "informes.h"
 #include "utn.h"
 
 /****************************************************
     Menu:
-     1. Cargar los datos de los empleados desde el archivo data.csv (modo texto).
-     2. Cargar los datos de los empleados desde el archivo data.csv (modo binario).
-     3. Alta de empleado
-     4. Modificar datos de empleado
-     5. Baja de empleado
-     6. Listar empleados
-     7. Ordenar empleados
-     8. Guardar los datos de los empleados en el archivo data.csv (modo texto).
-     9. Guardar los datos de los empleados en el archivo data.csv (modo binario).
-    10. Salir
+     1. Agregar cliente
+     2. Vender afiches
+     3. Modificar venta
+     4. Cobrar venta
+     5. Generar informe de cobros
+     6. Generar informe de deudas
+     7. Generar estadisticas
+     8. Salir
 *****************************************************/
 
 int main(void)
@@ -32,6 +34,7 @@ int main(void)
 
 	controller_loadOrSave("r", parser_ClienteFromText, "clientes.txt", listaCliente);
 	controller_loadOrSave("r", parser_VentasFromText, "ventas.txt", listaVentas);
+
 
 	do
 	{
@@ -64,7 +67,7 @@ int main(void)
 				break;
 
 			case 7:
-				if(utn_getMenu(menu, &subOpcion, 3,1,3)==0)
+				if(utn_getMenu(subMenu, &subOpcion, 3,1,3)==0)
 				{
 					switch(subOpcion)
 					{
@@ -88,6 +91,7 @@ int main(void)
 	controller_loadOrSave("w", parser_SaveClientToText, "clientes.txt", listaCliente);
 	controller_loadOrSave("w", parser_SaveVentaToText, "ventas.txt", listaVentas);
     printf("\nExit");
+
     return 0;
 }
 

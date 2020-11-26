@@ -1,7 +1,4 @@
 /*
- * cliente.h
- *
- *  Created on: 21 nov. 2020
  *      Author: l.rojas
  */
 
@@ -41,5 +38,16 @@ int veoSiExisteEsteID(void* itemOne,void* id);
 int Cliente_printById(void* itemOne,void* arg);
 int comparoIDCliente(void* itemOne,void* itemTwo);
 int Cliente_printCUIT(void* itemOne);
+
+
+
+
+
+
+
+
+
+
+
 
 #endif /* CLIENTE_H_ */

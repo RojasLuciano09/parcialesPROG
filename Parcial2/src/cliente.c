@@ -1,12 +1,5 @@
 /*
- * cliente.c
- *
- *  Created on: 21 nov. 2020
  *      Author: l.rojas
- */
-
-/** \brief Request memory to generate a new employee
- *
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,7 +32,8 @@ static int UpperFirstChar(char *string)
 
 
 
-
+/** \brief Función para solicitar un espacio de memoria.
+ */
 Cliente* Cliente_new()
 {
 	Cliente* this;
@@ -47,7 +41,7 @@ Cliente* Cliente_new()
 	return this;
 }
 
-/** \brief Method to remove an employee.
+/** \brief Función para liberar el espacio de memoria.
  * \param this Employee* : Employee being removed
  */
 void Cliente_delete(Cliente* this)
@@ -58,6 +52,15 @@ void Cliente_delete(Cliente* this)
 	}
 }
 
+/**
+ * \brief Función para crear un nuevo cliente con parametros.
+ * \param char* id: valor a setear en ID
+ * \param char* nombre: valor a setear en NOMBRE
+ * \param char* apellido: valor a setear en APELLIDO
+ * \param char* cuit: valor a setear en CUIT
+ * \return int output  (-1) Error
+                       ( 0) todo ok.
+ */
 Cliente* Cliente_newParametros(char* id,char* nombre,char* apellido, char* cuit)
 {
 	Cliente* this = Cliente_new();
@@ -69,20 +72,19 @@ Cliente* Cliente_newParametros(char* id,char* nombre,char* apellido, char* cuit)
 		   Cliente_set_cuit(this, cuit)==0			)
 		{
 			return this;
-		}else
-		{
-		//	printf("\n UN ERROR TOMANDO LOS DATOS LLEGO | %s | %s | %s | %s \n",id,nombre,apellido,cuit);
 		}
-
-	}else
-	{
-	//	printf("\n LLEGO ALGO NULL LACONCHADETUHERMANA  \n");
 	}
-
 	Cliente_delete(this);
 	return NULL;
 }
 
+/**
+ * \brief Función para setear el id a  un cliente.
+ * \param Cliente* this: Puntero al elemento.
+ * \param int id: Variable para setear el valor.
+ * \return int output  (-1) Error
+                       ( 0) todo ok.
+ */
 int Cliente_setId(Cliente* this,int id)
 {
 	int output=-1;
@@ -94,6 +96,13 @@ int Cliente_setId(Cliente* this,int id)
 	return output;
 }
 
+/**
+ * \brief Función para obtener el id de  un cliente.
+ * \param Cliente* this: Puntero al elemento.
+ * \param int* id: Puntero que obtendra el valor.
+ * \return int output  (-1) Error
+                       ( 0) todo ok.
+ */
 int  Cliente_getId(Cliente* this,int* id)
 {
 	int output=-1;
@@ -105,6 +114,13 @@ int  Cliente_getId(Cliente* this,int* id)
 	return output;
 }
 
+/**
+ * \brief Función para setear el id a  un cliente.
+ * \param Cliente* this: Puntero al elemento.
+ * \param char* id: Puntero que setear el valor.
+ * \return int output  (-1) Error
+                       ( 0) todo ok.
+ */
 int Cliente_setIdStr(Cliente* this, char* id)
 {
 	int retornar=-1;
@@ -118,6 +134,13 @@ int Cliente_setIdStr(Cliente* this, char* id)
 	return retornar;
 }
 
+/**
+ * \brief Función para obtener el id de  un cliente.
+ * \param Cliente* this: Puntero al elemento.
+ * \param char* id: Puntero que obtendra el valor.
+ * \return int output  (-1) Error
+                       ( 0) todo ok.
+ */
 int Cliente_getIdStr(Cliente* this,char* id)
 {
 	int output=-1;
@@ -130,6 +153,13 @@ int Cliente_getIdStr(Cliente* this,char* id)
 	return output;
 }
 
+/**
+ * \brief Función para setear el nombre a  un cliente.
+ * \param Cliente* this: Puntero al elemento.
+ * \param char* nombre: Puntero que setear el valor.
+ * \return int output  (-1) Error
+                       ( 0) todo ok.
+ */
 int Cliente_set_nombre(Cliente* this,char* nombre)
 {
 	int output=-1;
@@ -142,6 +172,13 @@ int Cliente_set_nombre(Cliente* this,char* nombre)
 	return output;
 }
 
+/**
+ * \brief Función para obtener el nombre de  un cliente.
+ * \param Cliente* this: Puntero al elemento.
+ * \param char* nombre: Puntero que obtendra el valor.
+ * \return int output  (-1) Error
+                       ( 0) todo ok.
+ */
 int Cliente_get_nombre(Cliente* this,char* nombre)
 {
 	int output=-1;
@@ -153,6 +190,13 @@ int Cliente_get_nombre(Cliente* this,char* nombre)
 	return output;
 }
 
+/**
+ * \brief Función para setear el apellido a  un cliente.
+ * \param Cliente* this: Puntero al elemento.
+ * \param char* apellido: Puntero que setear el valor.
+ * \return int output  (-1) Error
+                       ( 0) todo ok.
+ */
 int Cliente_set_apellido(Cliente* this,char* apellido)
 {
 	int output=-1;
@@ -165,6 +209,13 @@ int Cliente_set_apellido(Cliente* this,char* apellido)
 	return output;
 }
 
+/**
+ * \brief Función para obtener el apellido de  un cliente.
+ * \param Cliente* this: Puntero al elemento.
+ * \param char* apellido: Puntero que obtendra el valor.
+ * \return int output  (-1) Error
+                       ( 0) todo ok.
+ */
 int Cliente_get_apellido(Cliente* this,char* apellido)
 {
 	int output=-1;
@@ -176,13 +227,18 @@ int Cliente_get_apellido(Cliente* this,char* apellido)
 	return output;
 }
 
+/**
+ * \brief Función para setear el cuit a  un cliente.
+ * \param Cliente* this: Puntero al elemento.
+ * \param char* cuit: Puntero que setear el valor.
+ * \return int output  (-1) Error
+                       ( 0) todo ok.
+ */
 int Cliente_set_cuit(Cliente* this,char* cuit)
 {
-
 	int output=-1;
 	if(this!=NULL && isCuit(cuit)==1 && cuit!=NULL)
 	{
-
 		strncpy(this->cuit,cuit,LONG_NAME);
 
 		output=0;
@@ -190,6 +246,13 @@ int Cliente_set_cuit(Cliente* this,char* cuit)
 	return output;
 }
 
+/**
+ * \brief Función para obtener el cuit de  un cliente.
+ * \param Cliente* this: Puntero al elemento.
+ * \param char* cuit: Puntero que obtendra el valor.
+ * \return int output  (-1) Error
+                       ( 0) todo ok.
+ */
 int Cliente_get_cuit(Cliente* this,char* cuit)
 {
 	int output=-1;
@@ -201,6 +264,13 @@ int Cliente_get_cuit(Cliente* this,char* cuit)
 	return output;
 }
 
+/**
+ * \brief Función para imprimir por consola un cliente.
+ * \param void* itemOne: Puntero al elemento a castear
+ * \param void* arg: Puntero al elemento a comparar
+ * \return int output  (-1) Error
+                       ( 0) todo ok.
+ */
 int Cliente_print(void* itemOne)
 {
 	int output=-1;
@@ -226,6 +296,13 @@ int Cliente_print(void* itemOne)
 	return output;
 }
 
+/**
+ * \brief Función para imprimir por consola un cliente.
+ * \param void* itemOne: Puntero al elemento a castear
+ * \param void* arg: Puntero al elemento a comparar
+ * \return int output  (-1) Error
+                       ( 0) todo ok.
+ */
 int Cliente_printById(void* itemOne,void* arg)
 {
 	int output=-1;
@@ -253,7 +330,13 @@ int Cliente_printById(void* itemOne,void* arg)
 	return output;
 }
 
-
+/**
+ * \brief Función para ordenar por nombre.
+ * \param void* itemOne: Puntero al elemento a comparar
+ * \param void* itemTwo: Puntero al elemento a comparar
+ * \return int output  (-1) Error
+                       ( 0) todo ok.
+ */
 int Cliente_sort(void* itemOne,void* itemTwo)
 {
 	int output=0;
@@ -284,6 +367,13 @@ int Cliente_sort(void* itemOne,void* itemTwo)
 	return output;
 }
 
+/**
+ * \brief Función para ordenar por id
+ * \param void* itemOne: Puntero al elemento a comparar
+ * \param void* itemTwo: Puntero al elemento a comparar
+ * \return int output  (-1) Error
+                       ( 0) todo ok.
+ */
 int Cliente_sortID(void* itemOne,void* itemTwo)
 {
 	int output=0;
@@ -320,6 +410,12 @@ int Cliente_sortID(void* itemOne,void* itemTwo)
 	return output;
 }
 
+/**
+ * \brief Función para imprimir por consola el cuit de un cliente.
+ * \param void* itemOne: Puntero al elemento a comparar, es casteado a Cliente*
+ * \return int output  (-1) Error: si no se pudo obtener los datos.
+                       ( 0) todo ok.
+ */
 int Cliente_printCUIT(void* itemOne)
 {
 	int output=-1;
@@ -337,15 +433,12 @@ int Cliente_printCUIT(void* itemOne)
 	return output;
 }
 
-
-
-
-
-
-
-
 /**
- * comparo los ids
+ * \brief Función para comparar id.
+ * \param void* itemOne: Puntero al elemento a comparar, es casteado a Cliente*
+ * \param void* itemTwo: Puntero que tendra el valor del id del cliente a comparar.
+ * \return int output  (-1) Error: si no se pudo obtener los datos.
+                       ( 0) todo ok.
  */
 int comparoIDCliente(void* itemOne,void* itemTwo)
 {
@@ -363,10 +456,16 @@ int comparoIDCliente(void* itemOne,void* itemTwo)
 	return out;
 }
 
-
+/**
+ * \brief Función para corroborar si un cuit existe.
+ * \param void* itemOne: Puntero al elemento.
+ * \param void* id: Puntero que tendra el valor del id del cliente a comparar.
+ * \return int output  (-1) Error: si no se pudo obtener los datos.
+                       ( 0) todo ok.
+ */
 int thisCuitExists(void* itemOne,void* cuit)
 {
-	int output=0;
+	int output=-1;
 	Cliente* buffer1;
 	buffer1	 = itemOne;
 	char cuit_1[LONG_NAME];
@@ -375,23 +474,29 @@ int thisCuitExists(void* itemOne,void* cuit)
 	{
 		if(strncmp(cuit_1, cuit,LONG_NAME)==0)
 		{
-			output =-1;
+			output=0;
 		}
 	}
-
 	return output;
 }
 
+/**
+ * \brief Función para corroborar si un id existe.
+ * \param void* itemOne: Puntero al elemento.
+ * \param void* id: Argumento que tendra el valor del id del cliente a comparar.
+ * \return int output  (-1) Error: si no se pudo obtener los datos.
+                       ( 0) todo ok.
+ */
 int veoSiExisteEsteID(void* itemOne,void* id)
 {
 	int output=-1;
 	Cliente* buffer1;
 	buffer1	 = itemOne;
-	char idObtenido[LONG_NAME];
+	char idObtenido[SIZE];
 
 	if(Cliente_getIdStr(buffer1, idObtenido)==0)
 	{
-		if(strncmp(idObtenido, id,LONG_NAME)==0)
+		if(strncmp(idObtenido, id,SIZE)==0)
 		{
 			output =0;
 		}
